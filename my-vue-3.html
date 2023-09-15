@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myvue1</title>
+
+<style>
+	.myc1 {
+		font-size: 40px;
+		margin-bottom: 1em;
+	  }
+	  button {
+		font-size: 40px;
+		margin: 10px;
+	  }
+	  .box{
+		  padding:100px 0;
+		  width:400px;
+		  background:#00ff00;
+		  margin:20px;
+		  font-size: 40px;  
+		  }
+</style>
+</head>
+<body>
+	<div id="app" >
+		<span class="myc1">{{ count }}</span>
+		<span v-if='goster' class="myc1">    bu bir {{  message }}</span>
+		<br>
+		<button @click="count++">click +</button>
+
+		<button @click="count--">click -</button>
+		<br>
+		<button @click='fnk1'>clickmethod</button>
+		
+		<button @click='fnk2'>goster</button>
+		<br>
+		<div class='box'  @mouseover="myevent1" @mouseleave="myevent1">my mouse over or leave count {{sayi1}} - {{txt1}}</div>
+	</div>
+
+</body>	
+<script type="module">	
+	import { createApp, ref } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+
+	const app = createApp({
+	  data() {
+		return {
+		  count: 40,
+		  message :true,
+		  goster:true,
+		  sayi1:0,
+		  txt1:"aa"
+		}
+	  },
+	  methods: {
+		fnk1(){
+			  this.message=!this.message
+			  if (this.message==false){this.count=0}
+			  
+			  },
+		fnk2(){
+			  this.goster=!this.goster
+			  },
+			  
+		myevent1(e){
+			console.log(e);
+			this.sayi1++;
+			this.txt1=e.type;
+			
+			}
+		  }
+	})
+
+app.mount('#app')
+
+
+</script>
+
+</html>

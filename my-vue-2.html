@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myvue1</title>
+
+<style>
+	.myc1 {
+		font-size: 40px;
+	  }
+</style>
+</head>
+<body>
+	<div id="app" >
+		<span class="myc1">{{ count }}</span>
+		<span class="myc1">    bu bir {{  message }}</span>
+		<br>
+		<button @click="count++">click+</button>
+		<br>
+		<button @click="count--">click-</button>
+		<br>
+		<button @click='fnk1'>clickmethod</button>
+	</div>
+
+</body>	
+<script type="module">	
+	import { createApp, ref } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+
+	const app = createApp({
+	  data() {
+		return {
+		  count: 40,
+		  message :true
+		}
+	  },
+	  methods: {
+		  fnk1(){
+			  this.message=!this.message
+			  if (this.message==false){this.count=0}
+			  
+			  }
+		  }
+	})
+
+app.mount('#app')
+
+
+</script>
+
+</html>
