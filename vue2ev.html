@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<style>
+  div{ 
+    margin: 10px;
+    font-size: 1rem;
+  }
+  .aaa{
+    background-color: aqua;
+  }
+  .bbb{
+    background-color: rgb(60, 255, 0);
+  }
+</style>
+<body>
+    <div class="content" id="app">
+      <div class="box">listem = {{ names }} {{mycls1}}</div>
+      <li v-bind:class='mycls1' v-for='name in names'>{{name}}</li>
+      <input type="text" v-model='newName'>
+      <button class="button is-info" v-on:click='addName'>wwewe</button>
+      <div class="box">{{mytime.getHours()}}:{{mytime.getMinutes()}}.{{mytime.getSeconds()}}</div>
+      <progress class="progress" value="" max="100">100</progress>
+
+    </div>
+</body>
+
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        newName:"",
+        names:["ali","murat","efe12"],
+        mycls1:"bbb",
+        cnd1:true,
+        mytime:new Date(),
+        mycount:0,
+        mycount2:"30"
+      }
+    },
+    methods:{
+      addName(){
+        this.names.push(this.newName);
+        this.cnd1=!this.cnd1;
+        this.mycls1="aaa";
+        if (this.cnd1){this.mycls1="bbb"}else{this.mycls1="aaa"};
+        this.newName="";
+        this.mytime=new Date()
+      },
+      mytimer(){
+        setInterval(()=>{ 
+          this.mycount=this.mycount+1;
+        console.log(this.mycount);
+        this.mytime=new Date()
+        
+      }, 1000);
+      }
+      
+    },
+    watch: {
+    },
+    beforeMount() {
+    this.mytimer()
+    },
+    mounted(){}
+  })
+
+app.mount('#app')
+//https://bulma.io/documentation/elements/progress/
+</script>
+</html>
