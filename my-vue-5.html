@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<style>
+  div{ margin: 10px;}
+  button{ margin: 10px;}
+  .aaa{
+    background-color: aqua;
+  }
+  .bbb{
+    background-color: rgb(60, 255, 0);
+  }
+</style>
+<body>
+    <div id="app">
+      <div >listem = {{ names }} {{mycls1}}</div>
+      <li v-bind:class='mycls1' v-for='name in names'>{{name}}</li>
+      <input type="text" v-model='newName'>
+      <button v-on:click='addName'>wwewe</button>
+      <div>{{mytime.getHours()}}:{{mytime.getMinutes()}}</div>
+      <div>dolarmiktar*dolarkuru ={{dolarkuru*dolarmiktar}}</div>
+      <input type="text" v-model='dolarmiktar'>
+      <button v-on:click='dolarhesapla'>wwewe</button>
+
+    </div>
+</body>
+
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        newName:"",
+        names:["burak","murat","efe12"],
+        mycls1:"bbb",
+        cnd1:true,
+        mytime:new Date(),
+        dolarkuru:27,
+        dolarmiktar:1
+      }
+    },
+    methods:{
+      addName(){
+        this.names.push(this.newName);
+        this.cnd1=!this.cnd1;
+        this.mycls1="aaa";
+        if (this.cnd1){this.mycls1="bbb"}else{this.mycls1="aaa"};
+        this.newName="";
+        this.mytime=new Date()
+        
+      },
+      dolarhesapla(){
+		  //this.dolarkuru=100
+		  
+		  }
+      
+    },
+    computed :{},
+    mounted(){}
+  })
+
+app.mount('#app')
+</script>
+</html>

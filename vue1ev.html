@@ -22,6 +22,9 @@
       <input type="text" v-model='newName'>
       <button v-on:click='addName'>wwewe</button>
       <div>{{mytime.getHours()}}:{{mytime.getMinutes()}}</div>
+      <div>şu anki dolar kuru = {{dolarkuru}}</div>
+      <input type="text" v-model='newName'>
+      <button v-on:click='dolarhesapla'>wwewe</button>
 
     </div>
 </body>
@@ -31,10 +34,11 @@
     data() {
       return {
         newName:"",
-        names:["ali","murat","efe12"],
+        names:["burak","murat","efe12"],
         mycls1:"bbb",
         cnd1:true,
-        mytime:new Date()
+        mytime:new Date(),
+        dolarkuru:27
       }
     },
     methods:{
@@ -45,7 +49,12 @@
         if (this.cnd1){this.mycls1="bbb"}else{this.mycls1="aaa"};
         this.newName="";
         this.mytime=new Date()
-      }
+        
+      },
+      dolarhesapla(){
+		  this.dolarkuru=100
+		  
+		  }
       
     },
     mounted(){}

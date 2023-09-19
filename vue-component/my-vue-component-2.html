@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+</head>
+<style>
+  div{ margin: 10px;}
+  button{ margin: 10px;}
+  .aaa{
+    background-color: aqua;
+  }
+  .bbb{
+    background-color: rgb(60, 255, 0);
+  }
+</style>
+<body>
+    <div id="app">
+      <div >listem = {{ names }} {{mycls1}}</div>
+      <li v-bind:class='mycls1' v-for='name in names'>{{name}}</li>
+      <input type="text" v-model='newName'>
+      <button v-on:click='addName'>wwewe</button>
+      <div>{{mytime.getHours()}}:{{mytime.getMinutes()}}</div>
+      <div>dolarmiktar*dolarkuru ={{dolarkuru*dolarmiktar}}</div>
+      <input type="text" v-model='dolarmiktar'>
+      <button v-on:click='dolarhesapla'>wwewe</button>
+      <li  v-for='data in myapi1.data'>{{data}}</li>
+      <my-component :title="mytime.getSeconds()"></my-component>
+
+    </div>
+</body>
+
+<script type="module">
+	import { createApp, ref ,defineComponent} from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+
+	const app = createApp({
+    data() {
+      return {
+        newName:"",
+        names:["burak","murat","efe12"],
+        mycls1:"bbb",
+        cnd1:true,
+        mytime:new Date(),
+        dolarkuru:27,
+        dolarmiktar:1,
+        myapi1:"",
+        mycount:0,
+      }
+    },
+    methods:{
+      addName(){
+        this.names.push(this.newName);
+        this.cnd1=!this.cnd1;
+        this.mycls1="aaa";
+        if (this.cnd1){this.mycls1="bbb"}else{this.mycls1="aaa"};
+        this.newName="";
+        this.mytime=new Date()
+        
+      },
+      dolarhesapla(){
+		  //this.dolarkuru=100
+		  
+		  },
+	  mytimer(){
+        setInterval(()=>{ 
+          this.mycount=this.mycount+1;
+        console.log(this.mycount);
+        this.mytime=new Date()
+        
+      }, 1000);
+      }
+      
+    },
+    computed :{},
+    beforeMount() {
+    this.mytimer()
+    },
+    mounted(){
+		    axios
+      .get('https://api.binance.com/api/v3/ticker/price?symbol=USDTTRY')
+      .then(response => (this.myapi1 = response))
+		
+		}
+  });
+ //https://vuejs.org/guide/components/registration.html#global-registration
+app.component('my-component', {
+	 props: ['title'],
+	 template: '<article class="message">   <div class="message-header">{{ title }}</div>  </article>'
+})
+const MyComponent = app.component('my-component') 
+
+app.mount('#app')
+
+
+</script>
+</html>

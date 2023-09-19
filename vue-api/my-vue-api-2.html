@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+</head>
+<style>
+  .myflex{ 
+	  display: flex;
+	  flex-wrap: wrap;
+	  gap: 1rem;
+	   align-content: flex-start;
+	   flex-direction: column;
+	  
+	  }
+
+  .aaa{
+    background-color: aqua;
+    font-size: 2rem;
+
+  }
+  .bbb{
+    background-color: rgb(60, 255, 0);
+    font-size: 2rem;
+  }
+  .ccc{
+    background-color: green;
+  }
+    button{ 
+	  margin: 10px;
+	  }
+  input{ 
+	  margin: 10px;
+	  }
+</style>
+<body>
+    <div class ="myflex" id="app">
+      <div class="aaa">SAAT = {{mytime.getHours()}}:{{mytime.getMinutes()}}</div>
+      <div class="bbb">TL toplam ={{dolarkuru*dolarmiktar}}</div>
+      <input type="text" v-model='dolarmiktar'>
+      <button v-on:click='dolarhesapla'>guncelle</button>
+      <div v-if="loading">Loading...</div>
+      <div class="ccc" >{{myapi1.symbol}} -- {{myapi1.price}}</div>
+
+    </div>
+</body>
+
+<script type="module">
+	//https://v2.vuejs.org/v2/cookbook/using-axios-to-consume-apis.html?redirect=true
+	import { createApp, ref } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+	const app = createApp({
+    data() {
+      return {
+        mytime:new Date(),
+        dolarkuru:27,
+        dolarmiktar:1,
+        myapi1:"",
+        loading: true
+      }
+    },
+    methods:{
+      dolarhesapla(){
+		  this.loading=true;
+		  	axios
+      .get('https://api.binance.com/api/v3/ticker/price?symbol=USDTTRY')
+      .then(response => {
+		  this.myapi1 = response.data;
+		  this.dolarkuru=this.myapi1.price
+		  
+		  })
+      .catch(error => console.log(error))
+      .finally(() => this.loading = false)
+		  
+		  }
+      
+    },
+    computed :{},
+    mounted(){
+		this.dolarhesapla();
+		}
+  })
+
+app.mount('#app')
+</script>
+</html>
