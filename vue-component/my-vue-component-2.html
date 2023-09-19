@@ -38,7 +38,14 @@
       <input type="text" v-model='dolarmiktar'>
       <button v-on:click='dolarhesapla'>wwewe</button>
       <li  v-for='data in myapi1.data'>{{data}}</li>
-      <my-component title="saniye" :body="mytime.getSeconds()"></my-component>
+      <br>
+      <div class="columns is-vcentered">
+      <my-component class="column is-2" title="saat" :body="mytime.getHours()"></my-component>
+      <my-component class="column is-2" title="dakika" :body="mytime.getMinutes()"></my-component>
+      <my-component class="column is-2" title="saniye" :body="mytime.getSeconds()"></my-component>
+      </div>
+      <myclock></myclock>
+    
 
     </div>
 </body>
@@ -103,8 +110,26 @@ app.component('my-component', {
                    <div class="message-body">{{ body }}</div>
                    
               </article>`
+});
+app.component('myclock', {
+	 template: `
+      <div class="level" >
+        <div >
+          <p class="heading">Tarih</p>
+          <p class="title">{{myTime().toLocaleDateString()}}</p>
+        </div>
+      </div>
+              `
+              ,
+    methods:{
+      myTime(){
+        const mytime=new Date();
+        return mytime
+      }
+    }
 })
 const MyComponent = app.component('my-component') 
+const MyClock = app.component('myclock')
 
 app.mount('#app')
 
