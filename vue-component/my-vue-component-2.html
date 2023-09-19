@@ -12,7 +12,7 @@
   div{ margin: 10px;}
   button{ margin: 10px;}
   .aaa{
-    background-color: aqua;
+    background-color: rgb(229, 255, 0);
   }
   .bbb{
     background-color: rgb(60, 255, 0);
@@ -20,16 +20,25 @@
 </style>
 <body>
     <div id="app">
-      <div >listem = {{ names }} {{mycls1}}</div>
-      <li v-bind:class='mycls1' v-for='name in names'>{{name}}</li>
-      <input type="text" v-model='newName'>
-      <button v-on:click='addName'>wwewe</button>
-      <div>{{mytime.getHours()}}:{{mytime.getMinutes()}}</div>
+      <div class="level" >
+        <div class="level-item has-text-centered">
+          <p class="heading">Saat</p>
+          <p class="title">{{mytime.getHours()}}:{{mytime.getMinutes()}}:{{mytime.getSeconds()}}</p>
+        </div>
+      </div>
+      
+      <div class="notification is-primary">
+      <div>listem = {{ names }} {{mycls1}}</div>
+      <li  v-bind:class='mycls1' v-for='name in names'>{{name}}</li>
+      <input  class="input is-rounded" placeholder="...." type="text" v-model='newName'>
+      <button v-on:click='addName'>listeye ekle</button>
+      </div>
+
       <div>dolarmiktar*dolarkuru ={{dolarkuru*dolarmiktar}}</div>
       <input type="text" v-model='dolarmiktar'>
       <button v-on:click='dolarhesapla'>wwewe</button>
       <li  v-for='data in myapi1.data'>{{data}}</li>
-      <my-component :title="mytime.getSeconds()"></my-component>
+      <my-component title="saniye" :body="mytime.getSeconds()"></my-component>
 
     </div>
 </body>
@@ -88,8 +97,12 @@
   });
  //https://vuejs.org/guide/components/registration.html#global-registration
 app.component('my-component', {
-	 props: ['title'],
-	 template: '<article class="message">   <div class="message-header">{{ title }}</div>  </article>'
+	 props: ['title','body'],
+	 template: `<article class="message"> 
+                   <div class="message-header">{{ title }}</div>
+                   <div class="message-body">{{ body }}</div>
+                   
+              </article>`
 })
 const MyComponent = app.component('my-component') 
 
