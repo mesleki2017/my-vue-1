@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+</head>
+<style>
+  div{ margin: 10px;}
+  button{ margin: 10px;}
+  .aaa{
+    background-color: rgb(229, 255, 0);
+  }
+  .bbb{
+    background-color: rgb(60, 255, 0);
+  }
+</style>
+<body>
+    <div id="app">
+      <div class="level" >
+        <div class="level-item has-text-centered">
+          <p class="heading">Saat</p>
+          <p class="title">{{mytime.getHours()}}:{{mytime.getMinutes()}}:{{mytime.getSeconds()}}</p>
+        </div>
+      </div>
+      <div class="columns is-vcentered">
+      <my-component class="column is-2" title="TL Karşılık " :body ="dolarkuru*dolarmiktar"></my-component></my-component>
+      <div class="column is-2">
+      <label class="label">USD Miktar Girin </label>
+      <input   type="text" v-model='dolarmiktar'>
+      </div>
+      <my-component class="column is-2" :title="myapi1.symbol" :body="myapi1.price"></my-component>
+      </div>
+      <br>
+      <div class="columns is-vcentered">
+      <my-component class="column is-2" title="saat" :body="mytime.getHours()"></my-component>
+      <my-component class="column is-2" title="dakika" :body="mytime.getMinutes()"></my-component>
+      <my-component class="column is-2" title="saniye" :body="mytime.getSeconds()"></my-component>
+      </div>
+      <myclock></myclock>
+
+      
+    
+
+    </div>
+</body>
+
+<script type="module">
+	import { createApp, ref ,defineComponent} from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+
+	const app = createApp({
+    data() {
+      return {
+        mycls1:"bbb",
+        cnd1:true,
+        mytime:new Date(),
+        dolarkuru:27,
+        dolarmiktar:1,
+        myapi1:"",
+        mycount:0,
+      }
+    },
+    methods:{
+      addName(){
+        this.names.push(this.newName);
+        this.cnd1=!this.cnd1;
+        this.mycls1="aaa";
+        if (this.cnd1){this.mycls1="bbb"}else{this.mycls1="aaa"};
+        this.newName="";
+        this.mytime=new Date()
+        
+      },
+      dolarhesapla(){
+		  //this.dolarkuru=100
+		  
+		  },
+	  mytimer(){
+        setInterval(()=>{ 
+          this.mycount=this.mycount+1;
+        console.log(this.mycount);
+        this.mytime=new Date()
+        
+      }, 1000);
+      }
+      
+    },
+    computed :{},
+    beforeMount() {
+    this.mytimer()
+    },
+    mounted(){
+		    axios
+      .get('https://api.binance.com/api/v3/ticker/price?symbol=USDTTRY')
+      .then(response => (this.myapi1 = response.data))
+		
+		}
+  });
+ //https://vuejs.org/guide/components/registration.html#global-registration
+app.component('my-component', {
+	 props: ['title','body'],
+	 template: `<article class="message"> 
+                   <div class="message-header">{{ title }}</div>
+                   <div class="message-body">{{ body }}</div>
+                   
+              </article>`
+});
+app.component('myclock', {
+	 template: `
+      <div class="level" >
+        <div >
+          <p class="heading">Tarih</p>
+          <p class="title">{{myTime().toLocaleDateString()}}</p>
+        </div>
+      </div>
+              `
+              ,
+    methods:{
+      myTime(){
+        const mytime=new Date();
+        return mytime
+      }
+    }
+})
+const MyComponent = app.component('my-component') 
+const MyClock = app.component('myclock')
+
+app.mount('#app')
+
+
+</script>
+</html>

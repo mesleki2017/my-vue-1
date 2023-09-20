@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+</head>
+<style>
+  div{ margin: 10px;}
+  button{ margin: 10px;}
+  .aaa{
+    background-color: rgb(229, 255, 0);
+  }
+  .bbb{
+    background-color: rgb(60, 255, 0);
+  }
+</style>
+<body>
+    <div id="app">
+
+  <div class="search-wrapper panel-heading col-sm-12">
+    <input type="text" v-model="search" placeholder="Search" /> <br> <br>
+  </div>  
+  <table class="table" id="myTable">
+    <thead>
+      <tr>
+          <th>ID</th>
+          <th>İsim</th>
+          <th>Adres</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="product in filteredProducts" :key="product.id">
+          <td>{{ product.id }}</td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.adres }}</td>
+      </tr>
+    </tbody>
+   </table>    
+
+    </div>
+</body>
+
+<script type="module">
+	//https://stackoverflow.com/questions/69287834/search-bar-vue-js
+	import { createApp, ref ,defineComponent} from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+
+	const app = createApp({
+  data() {
+    return {
+      products: [
+        {id: 1, name: "Bulent Cesur",adres:"siteler"},
+        {id: 2, name: "Burak", adres:"keçiören"},
+        {id: 3, name: "Özkan",adres:"mamak"},
+        {id: 4, name: "Hakan",adres:"dikmen"}
+      ],
+      search: ""
+    };
+  },
+  computed: {
+    filteredProducts() {
+      return this.products.filter(p => {
+        // return true if the product should be visible
+
+        // in this example we just check if the search string
+        // is a substring of the product name (case insensitive)
+        return p.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
+      });
+    }
+  }
+});
+ //https://vuejs.org/guide/components/registration.html#global-registration
+app.component('my-component', {
+	 props: ['title','body'],
+	 template: `<article class="message"> 
+                   <div class="message-header">{{ title }}</div>
+                   <div class="message-body">{{ body }}</div>
+                   
+              </article>`
+});
+app.component('myclock', {
+	 template: `
+      <div class="level" >
+        <div >
+          <p class="heading">Tarih</p>
+          <p class="title">{{myTime().toLocaleDateString()}}</p>
+        </div>
+      </div>
+              `
+              ,
+    methods:{
+      myTime(){
+        const mytime=new Date();
+        return mytime
+      }
+    }
+})
+const MyComponent = app.component('my-component') 
+const MyClock = app.component('myclock')
+
+app.mount('#app')
+
+
+</script>
+</html>

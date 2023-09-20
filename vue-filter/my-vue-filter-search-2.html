@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" >
+
+</head>
+<style>
+  div{ margin: 10px;}
+  button{ margin: 10px;}
+  .aaa{
+    background-color: rgb(229, 255, 0);
+  }
+  .bbb{
+    background-color: rgb(60, 255, 0);
+  }
+</style>
+<body>
+    <div id="app">
+
+<div class="panel panel-default">
+   <div class="panel-heading">
+         <strong> All Resources</strong></div>
+            <div class="row">
+                 <div class="search-wrapper panel-heading col-sm-12">
+                     <input class="form-control" type="text" v-model="searchQuery" placeholder="Search" />
+                </div>                        
+            </div>
+        <div class="table-responsive">
+            <table v-if="resources.length" class="table">
+                <thead>
+                    <tr>
+                         <th>Resource</th>
+                         <th>uri</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in resultQuery">
+                        <td><a v-bind:href="item.uri" target="_blank">{{item.title}}</a></td>
+                        <td><a v-bind:href="item.uri" target="_blank">{{item.uri}}</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+   </div> 
+
+    </div>
+</body>
+
+<script type="module">
+	//https://stackoverflow.com/questions/69287834/search-bar-vue-js
+	import { createApp, ref ,defineComponent} from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+
+	const app = createApp({
+  data() {
+    return {
+        searchQuery: null,
+        resources:[
+            {title:"ABE Attendance",uri:"aaaa.com",category:"a",icon:null},
+            {title:"Accounting Services",uri:"aaaa.com",category:"a",icon:null},
+            {title:"Administration",uri:"aaaa.com",category:"a",icon:null},
+            {title:"Advanced Student Lookup",uri:"bbbb.com",category:"b",icon:null},
+            {title:"Art & Sciences",uri:"bbbb.com",category:"b",icon:null},
+            {title:"Auxiliares Services",uri:"bbbb.com",category:"b",icon:null},
+            {title:"Basic Skills",uri:"cccc.com",category:"c",icon:null},
+            {title:"Board of Trustees",uri:"dddd.com",category:"d",icon:null}
+        ]
+    };
+  },
+  computed: {
+    resultQuery(){
+      if(this.searchQuery){
+      return this.resources.filter((item)=>{
+        return this.searchQuery.toLowerCase().split(' ').every(v => item.title.toLowerCase().includes(v) || item.uri.toLowerCase().includes(v))
+      })
+      }else{
+        return this.resources;
+      }
+    }
+  }
+});
+ //https://vuejs.org/guide/components/registration.html#global-registration
+app.component('my-component', {
+	 props: ['title','body'],
+	 template: `<article class="message"> 
+                   <div class="message-header">{{ title }}</div>
+                   <div class="message-body">{{ body }}</div>
+                   
+              </article>`
+});
+app.component('myclock', {
+	 template: `
+      <div class="level" >
+        <div >
+          <p class="heading">Tarih</p>
+          <p class="title">{{myTime().toLocaleDateString()}}</p>
+        </div>
+      </div>
+              `
+              ,
+    methods:{
+      myTime(){
+        const mytime=new Date();
+        return mytime
+      }
+    }
+})
+const MyComponent = app.component('my-component') 
+const MyClock = app.component('myclock')
+
+app.mount('#app')
+
+
+</script>
+</html>
