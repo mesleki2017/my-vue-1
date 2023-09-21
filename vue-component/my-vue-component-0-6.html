@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<p>mouse event : go over above texts</p>
+
+      <div id = "component_test">
+         <testcomponent></testcomponent>
+      </div>
+      <div id = "component_test1">
+         <testcomponent></testcomponent>
+      </div>
+<script>
+Vue.component('testcomponent',{
+   template : '<div v-on:mouseover = "changename()" v-on:mouseout = "originalname();"><h1>Custom Component created by <span id = "name">{{name}}</span></h1></div>',
+   data: function() {
+      return {
+         name : "Ria"
+      }
+   },
+   methods:{
+      changename : function() {
+         this.name = "Ben";
+      },
+      originalname: function() {
+         this.name = "Ria";
+      }
+   }
+});
+var vm = new Vue({
+   el: '#component_test'
+});
+var vm1 = new Vue({
+   el: '#component_test1'
+});
+</script>
+
+
+</html>

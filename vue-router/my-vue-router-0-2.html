@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    
+
+</head>
+
+      </style>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+ <script src="https://unpkg.com/vue-router@3.6.5/dist/vue-router.js"></script>
+<div id="app">
+  <h1>Volla..!</h1>
+  <p>
+    <router-link to="/home">Go to Home</router-link>
+    <router-link to="/about">Go to About</router-link>
+  </p>
+  <!-- if component matched then render here-->
+  <router-view></router-view>
+</div>
+<script>
+const home = { template: '<div>Home</div>' }
+const about = { template: '<div>About</div>' }
+//Above two are imported from others.
+
+const routes = [
+  { path: '/home', component: home},
+  { path: '/about', component: about}
+]
+
+// Create the router instance and pass the `routes` option
+// You can pass in additional options here, but let's
+const router = new VueRouter({
+  routes // short for `routes: routes`
+})
+
+// Create and mount the root instance.
+// Make sure to inject the router with the router option to make the
+// whole app router-aware.
+const app = new Vue({
+  router
+}).$mount('#app')
+</script>
+
+
+</html>

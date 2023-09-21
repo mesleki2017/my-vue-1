@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<div id="app">
+   {{ parentHeader.label }}{{ parentHeader.globalCount }}
+   <hr />
+   <rating-counter title="Rating 1" v-bind:parent="parentHeader"></rating-counter>
+   <rating-counter title="Rating 2" v-bind:parent="parentHeader"></rating-counter>
+   <rating-counter title="Rating 3" v-bind:parent="parentHeader"></rating-counter>
+</div>
+<script>
+	//https://www.linode.com/docs/guides/how-to-build-and-use-vuejs-components/
+Vue.component('rating-counter', {
+    props: ['title', 'parent'],
+    data() {
+        return {
+            count: 0
+        }
+    },
+    template:   `<div>
+                    <h1>{{ title }}</h1>
+                    <button v-on:click="count--;parent.globalCount--;">Thumbs Down</button>
+                    {{ count }}
+                    <button v-on:click="count++;parent.globalCount++;">Thumbs Up</button>
+                </div>`
+})
+
+new Vue({
+    el: '#app',
+    data: {
+        parentHeader: {
+            label: "Counter is at: ",
+            globalCount: 0
+        }
+    }
+})
+</script>
+
+
+</html>

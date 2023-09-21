@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+      <div id = "computed_props">
+         <h1 style = "background-color:gray;">Random No from computed property: {{getrandomno}}</h1>
+         <h1>Random No from method: {{getrandomno1()}}</h1>
+         <h1>Random No from method : {{getrandomno1()}}</h1>
+         <h1  style = "background-color:gray;">Random No from computed property: {{getrandomno}}</h1>
+         <h1  style = "background-color:gray;">Random No from computed property: {{getrandomno}}</h1>
+         <h1  style = "background-color:gray;">Random No from computed
+            property: {{getrandomno}}</h1>
+         <h1>Random No from method: {{getrandomno1()}}</h1>
+         <h1>Random No from method: {{getrandomno1()}}</h1>
+      </div>
+<script>
+         var vm = new Vue({
+            el: '#computed_props',
+            data: {
+               name : "helloworld"
+            },
+            methods: {
+               getrandomno1 : function() {
+                  return Math.random();
+               }
+            },
+            computed :{
+               getrandomno : function(){
+                  return Math.random();
+               }
+            }
+         });
+</script>
+
+
+</html>
