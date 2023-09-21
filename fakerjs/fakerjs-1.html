@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faker.js Örneği - Türkçe İsimler</title>
+</head>
+<body>
+    <h1>Faker.js Örneği - Türkçe İsimler</h1>
+
+    <ul id="sahteKisiler"></ul>
+
+    <button id="sahteVeriOlustur">Sahte Kişileri Oluştur</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Faker/3.1.0/faker.min.js"></script>
+    <script>
+        const sahteKisilerListesi = document.getElementById('sahteKisiler');
+        const sahteVeriOlusturDugmesi = document.getElementById('sahteVeriOlustur');
+
+        sahteVeriOlusturDugmesi.addEventListener('click', () => {
+            sahteKisilerListesi.innerHTML = ''; // Önceki sahte kişileri temizle
+
+            for (let i = 0; i < 10; i++) { // 10 sahte kişi oluştur
+                const sahteIsim = faker.name.findName();
+                const sahteEmail = faker.internet.email();
+
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `<strong>İsim:</strong> ${sahteIsim}, <strong>E-posta:</strong> ${sahteEmail}`;
+
+                sahteKisilerListesi.appendChild(listItem);
+            }
+        });
+    </script>
+</body>
+</html>
