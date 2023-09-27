@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet.js Example with Current Location, Marker, and Sun Circle</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    
+
+	<script src="https://unpkg.com/leaflet-swoopy"></script>
+	<script src="https://cdn.osmbuildings.org/4.1.1/OSMBuildings.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+
+
+    <style>
+  div{ margin: 10px;}
+  button{ margin: 10px;}
+  .aaa{
+    background-color: rgb(229, 255, 0);
+  }
+  .bbb{
+    background-color: rgb(60, 255, 0);
+  }
+          #map {
+            width: 100%;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+	
+    <div id="app">
+		
+    
+    
+    <div class="notification is-primary">
+		<h1 class="title">NOW</h1>
+		<mytime></mytime>
+		<button class="button is-info" v-on:click='konum'>Şuanki Konum</button>
+	<div class="columns is-vcentered">
+		<mycmp1 title="lat-long" :body="mylat+','+mylong"></mycmp1>
+		<mycmp1  title="sunAltitude-sunAzimuth" :body="'sunAltitude : '+sunAltitude+'\n'+'sunAzimuth : '+sunAzimuth"></mycmp1>
+		<mycmp1   title="sunriseTime" :body="sunriseTime.getHours()+':'+ sunriseTime.getMinutes()"></mycmp1>
+		<mycmp1   title="sunriseAltitude" :body="sunriseAltitude"></mycmp1>
+		<mycmp1  title="sunriseAzimuth" :body="sunriseAzimuth"></mycmp1>
+
+	</div>
+		<div class="content">
+		<div id="map"></div>
+		</div>
+	
+	</div>
+	
+    
+    
+    </div>
+
+    <script type="module">
+		import { createApp, ref ,defineComponent} from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+        
+        	const app = createApp({
+    data() {
+      return {
+		mylong:" -------- ",
+		mylat:" --------- ",
+		sunPosition:"",
+		sunAltitude:"",
+		sunAzimuth:"",
+		sunriseTime:new Date("0"),
+		sunrisePosition:"",
+		sunriseAltitude:"",
+		sunriseAzimuth:"",
+		map:null,
+		currentLocationMarker: null,
+		sunCircleMarker: null,
+		sunLine:null,
+		options :{
+			  enableHighAccuracy: true,
+			  timeout: 5000,
+			  maximumAge: 0}
+      }
+    },
+    methods:{
+      konum(){
+			navigator.geolocation.getCurrentPosition(this.success, this.error, this.options)
+      },
+     success(position) {
+                    this.mylong=position.coords.longitude.toFixed(6);
+                    this.mylat=position.coords.latitude.toFixed(6);
+                    this.mysun();
+                    this.mymap();
+                    },
+	error(err) {console.warn(`MYERROR(${err.code}): ${err.message}`);},
+	mysun(){
+		this.sunPosition = SunCalc.getPosition(new Date(), this.mylat, this.mylong);
+		this.sunAltitude=(this.sunPosition.altitude * 180 / Math.PI).toFixed(2);
+		this.sunAzimuth = (this.sunPosition.azimuth * 180 / Math.PI).toFixed(2);
+		
+		this.sunriseTime = SunCalc.getTimes(new Date(),this.mylat, this.mylong).sunrise;
+		this.sunrisePosition = SunCalc.getPosition(this.sunriseTime, this.mylat, this.mylong);
+		this.sunriseAltitude = (this.sunrisePosition.altitude * 180 / Math.PI).toFixed(2);
+		this.sunriseAzimuth = (this.sunrisePosition.azimuth * 180 / Math.PI).toFixed(2);
+		},
+	mymap(){
+        var latlng = new L.LatLng(this.mylat, this.mylong);
+        var ddd1=[this.mylat, this.mylong];
+        var ddd2=[this.mylat, this.mylong+2];
+        var ddd3=latlng.toBounds(200)["_southWest"];
+        var ddd4=latlng.toBounds(200)["_northEast"];
+        var ddd5=[this.mylat,this.map.getBounds().getWest()];
+        var ddd6=[this.map.getBounds().getNorth(),this.mylong];
+        var ddd7=[this.map.getBounds().getSouth(),this.mylong];
+        var ddd8=[this.mylat,this.map.getBounds().getEast()];
+
+        this.map.setView(latlng, 13);
+        this.currentLocationMarker = L.marker(latlng).addTo(this.map);
+        this.sunCircleMarker = L.circle({"lat":this.mylat,"lng":this.mylong}, {radius: 200}).addTo(this.map);
+        this.sunLine=L.polyline([ddd1,ddd3],{color: '#ff0000',weight: 3}).addTo(this.map);
+        this.sunLine=L.polyline([ddd1,ddd4],{color: '#00ff00',weight: 3}).addTo(this.map);
+        this.sunLine=L.polyline([ddd1,ddd5],{color: '#00ff00',weight: 3}).addTo(this.map);
+        this.sunLine=L.polyline([ddd1,ddd6],{color: '#ffff00',weight: 3}).addTo(this.map);
+        this.sunLine=L.polyline([ddd1,ddd7],{color: '#00ffff',weight: 3}).addTo(this.map);
+        this.sunLine=L.polyline([ddd1,ddd8],{color: '#00ff00',weight: 3}).addTo(this.map);
+        console.log(latlng.distanceTo(ddd2));
+        console.log(latlng.wrap());
+        console.log(latlng.toBounds(200));
+        console.log("-----",this.map.getBounds().getWest());
+
+        //map.setView(, 13);
+		},
+	toRadian(degree) {
+    return degree*Math.PI/180;
+		},
+	toDegree(radian) {
+    return radian*180/Math.PI;
+		}
+      },
+    computed :{},
+    mounted(){	
+				this.map = L.map('map').setView([51.505, -0.09], 13);
+		        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(this.map);
+        //L.Control.geocoder().addTo(this.map);
+
+		}
+  });
+app.component("mycmp1",{
+	props: ['title','body'],
+		 template: `
+		 <div class="column is-2">
+				<article  class="message"> 
+                   <div class="message-header">{{ title }}</div>
+                   <div class="message-body">{{ body }}</div>
+                   
+				</article>
+		</div>
+				`
+	})
+app.component('mytime', {
+	 template: `
+      <div class="level" >
+        <div >
+          <p class="heading">Tarih</p>
+          <p class="title">{{myTime().toLocaleDateString()}}</p>
+        </div>
+      </div>
+              `
+              ,
+    methods:{
+      myTime(){
+        const mytime=new Date();
+        return mytime
+      }
+    }
+})
+const MyComponent = app.component('mycmp1') 
+const MyClock = app.component('mytime')
+app.mount('#app')
+
+    </script>
+</body>
+</html>

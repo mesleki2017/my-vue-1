@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet.js Example with Current Location, Marker, and Sun Circle</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    
+
+	<script src="https://unpkg.com/leaflet-swoopy"></script>
+	<script src="https://cdn.osmbuildings.org/4.1.1/OSMBuildings.js"></script>
+
+
+
+    <style>
+  div{ margin: 10px;}
+  button{ margin: 10px;}
+  .aaa{
+    background-color: rgb(229, 255, 0);
+  }
+  .bbb{
+    background-color: rgb(60, 255, 0);
+  }
+    </style>
+</head>
+<body>
+	
+    <div id="app">
+		
+    <button class="button is-info" v-on:click='konum'>Şuanki Konum</button>
+    
+    <div class="notification is-primary">
+		<h1 class="title">NOW</h1>
+		<mytime></mytime>
+	<div class="columns is-vcentered">
+		<mycmp1 title="lat-long" :body="mylat+','+mylong"></mycmp1>
+		<mycmp1  title="sunAltitude-sunAzimuth" :body="'sunAltitude : '+sunAltitude+'\n'+'sunAzimuth : '+sunAzimuth"></mycmp1>
+	</div>
+	</div>
+	
+	<div class="notification is-primary">
+		<h1 class="title">Sun Rise</h1>
+	<div class="columns is-vcentered">
+		<mycmp1   title="sunriseTime" :body="sunriseTime.getHours()+':'+ sunriseTime.getMinutes()"></mycmp1>
+		<mycmp1   title="sunriseAltitude" :body="sunriseAltitude"></mycmp1>
+		<mycmp1  title="sunriseAzimuth" :body="sunriseAzimuth"></mycmp1>
+	</div>
+	</div>
+    
+    </div>
+
+    <script type="module">
+		import { createApp, ref ,defineComponent} from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+        
+        	const app = createApp({
+    data() {
+      return {
+		mylong:" -------- ",
+		mylat:" --------- ",
+		sunPosition:"",
+		sunAltitude:"",
+		sunAzimuth:"",
+		sunriseTime:new Date("0"),
+		sunrisePosition:"",
+		sunriseAltitude:"",
+		sunriseAzimuth:"",
+		options :{
+			  enableHighAccuracy: true,
+			  timeout: 5000,
+			  maximumAge: 0}
+      }
+    },
+    methods:{
+      konum(){
+			navigator.geolocation.getCurrentPosition(this.success, this.error, this.options)
+      },
+     success(position) {
+                    this.mylong=position.coords.longitude.toFixed(6);
+                    this.mylat=position.coords.latitude.toFixed(6);
+                    this.mysun();
+                    },
+	error(err) {console.warn(`MYERROR(${err.code}): ${err.message}`);},
+	mysun(){
+		this.sunPosition = SunCalc.getPosition(new Date(), this.mylat, this.mylong);
+		this.sunAltitude=(this.sunPosition.altitude * 180 / Math.PI).toFixed(2);
+		this.sunAzimuth = (this.sunPosition.azimuth * 180 / Math.PI).toFixed(2);
+		
+		this.sunriseTime = SunCalc.getTimes(new Date(),this.mylat, this.mylong).sunrise;
+		this.sunrisePosition = SunCalc.getPosition(this.sunriseTime, this.mylat, this.mylong);
+		this.sunriseAltitude = (this.sunrisePosition.altitude * 180 / Math.PI).toFixed(2);
+		this.sunriseAzimuth = (this.sunrisePosition.azimuth * 180 / Math.PI).toFixed(2);
+		}
+      },
+    computed :{},
+    mounted(){	
+		}
+  });
+app.component("mycmp1",{
+	props: ['title','body'],
+		 template: `
+		 <div class="column is-2">
+				<article  class="message"> 
+                   <div class="message-header">{{ title }}</div>
+                   <div class="message-body">{{ body }}</div>
+                   
+				</article>
+		</div>
+				`
+	})
+app.component('mytime', {
+	 template: `
+      <div class="level" >
+        <div >
+          <p class="heading">Tarih</p>
+          <p class="title">{{myTime().toLocaleDateString()}}</p>
+        </div>
+      </div>
+              `
+              ,
+    methods:{
+      myTime(){
+        const mytime=new Date();
+        return mytime
+      }
+    }
+})
+const MyComponent = app.component('mycmp1') 
+const MyClock = app.component('mytime')
+app.mount('#app')
+
+    </script>
+</body>
+</html>
