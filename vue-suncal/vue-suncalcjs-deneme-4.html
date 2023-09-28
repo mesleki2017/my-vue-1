@@ -65,6 +65,7 @@
       return {
 		mylong:" -------- ",
 		mylat:" --------- ",
+		mytime:new Date(),
 		sunPosition:"",
 		sunAltitude:"",
 		sunAzimuth:"",
@@ -94,7 +95,7 @@
                     },
 	error(err) {console.warn(`MYERROR(${err.code}): ${err.message}`);},
 	mysun(){
-		this.sunPosition = SunCalc.getPosition(new Date(), this.mylat, this.mylong);
+		this.sunPosition = SunCalc.getPosition(this.mytime, this.mylat, this.mylong);
 		this.sunAltitude= this.toDegree(this.sunPosition.altitude).toFixed(2);
 		this.sunAzimuth = this.toDegree(this.sunPosition.azimuth).toFixed(2);
 		
@@ -159,11 +160,23 @@
 		var endLonRads = startLonRad + Math.atan2(Math.sin(initialBearingRadians) * distRatioSine * startLatCos, distRatioCosine - startLatSin * Math.sin(endLatRads));
 		var endPoint=[this.toDegree(endLatRads),this.toDegree(endLonRads)];
 		
-		L.polyline([startPoint,endPoint],{color: '#ff0000',weight: 3}).addTo(this.map);
+		L.polyline([startPoint,endPoint],{color: '#ff0000',weight: 1}).addTo(this.map);
+		L.circle({"lat":endPoint[0],"lng":endPoint[1]}, {radius: 80,color: 'red',fillColor: 'red',fillOpacity:0}).addTo(this.map);
 		return endPoint	
-		}
+		},
+	mytimer(){
+        setInterval(()=>{ 
+        this.mytime=new Date();
+		this.mysun();
+		this.myLine([this.mylat, this.mylong],180+parseFloat(this.sunAzimuth))
+        
+      }, 1000);
+      }
       },
     computed :{},
+	beforeMount() {
+    this.mytimer()
+    },
     mounted(){	
 				this.map = L.map('map').setView([51.505, -0.09], 13);
 		        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
