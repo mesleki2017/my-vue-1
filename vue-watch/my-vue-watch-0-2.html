@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<style>
+
+</style>
+<body>
+    <div id="app">
+      <div > {{ timerCount }} {{timerEnabled}} </div>
+      <button v-on:click='aaa'>wwewe</button>
+
+    </div>
+</body>
+
+<script>
+   //https://stackoverflow.com/questions/55773602/how-do-i-create-a-simple-10-seconds-countdown-in-vue-js
+   // bu kodu tam analamadim
+  const app = Vue.createApp({
+   data() {
+            return {
+                timerCount: 30,
+                timerEnabled: true,
+            }
+        },
+        methods:{
+
+         aaa(){
+            this.timerEnabled=!this.timerEnabled;
+         console.log("*-*-*-*-*-*")
+         }
+        },
+
+        watch: {
+            timerCount: {
+                handler(value) {
+
+                    if (value > 0 && this.timerEnabled) {
+                        setTimeout(() => {
+                            this.timerCount--;
+                        }, 1000);
+                    }
+
+                },
+                immediate: true // This ensures the watcher is triggered upon creation
+            }
+
+        }
+  })
+
+app.mount('#app')
+</script>
+</html>

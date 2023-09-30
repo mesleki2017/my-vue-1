@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
+</head>
+<style>
+
+</style>
+<body>
+    <div id="app">
+      <div > {{mydate1}}</div>
+      <div > {{mydate2}}</div>
+      <div > {{mydate3}}</div>
+      <div > {{mydate4}}</div>
+      <div > {{mydate6}}</div>
+      <div > {{sunPosition}}</div>
+      <button v-on:click='aaa'>wwewe</button>
+
+    </div>
+</body>
+
+<script>
+   //https://stackoverflow.com/questions/55773602/how-do-i-create-a-simple-10-seconds-countdown-in-vue-js
+   // bu kodu tam analamadim
+  const app = Vue.createApp({
+   data() {
+            return {
+                mylat:"39.938300",
+                mylong:"32.852100",
+                sunPosition:"*************",
+                yourdate :'2021-01-02T07:57:45.121Z',
+                formatDate: 1399919400000,
+                mynow:new Date(),
+                mydate1:"----------",
+                mydate2:"----------",
+                mydate3:"----------",
+                mydate4:"----------",
+                mydate5:"----------",
+                mydate6:moment(this.mynow),
+            }
+        },
+        methods:{
+
+         aaa(){
+            this.mydate1=moment(this.yourdate).format('DD/MM/YYYY');
+
+         this.mydate2=moment(this.formatDate).format('DD/MM/YYYY')
+         this.mydate3=moment(this.formatDate).add(1, 'week').format('DD/MM/YYYY');
+         this.mydate4=moment(this.mynow).format('DD/MM/YYYY HH:mm:ss ');
+         this.mydate5=moment(this.mynow).add(10, 'minutes').format('DD/MM/YYYY HH:mm:ss ');
+
+         
+         this.mytimer()
+         },
+         mytimer(){
+        setInterval(()=>{ 
+            this.sunPosition = SunCalc.getPosition(this.mydate6, this.mylat, this.mylong);
+            this.mydate6=moment(this.mydate6).add(10, 'minutes');
+            console.log(this.mydate6)
+   
+      }, 1000);
+        }
+    }
+  })
+
+app.mount('#app')
+</script>
+</html>
