@@ -78,10 +78,15 @@
 		sunrisePosition:"",
 		sunriseAltitude:"",
 		sunriseAzimuth:"",
+		sunSetTime:new Date("0"),
+		sunSetAzimuth:"",
 		map:null,
 		currentLocationMarker: null,
 		sunCircleMarker: null,
 		sunLine:null,
+		sunRiseMarker:null,
+		sunRiseLine:null,
+		sunSetLine:null,
 		mycircle:null,
 		options :{
 			  enableHighAccuracy: true,
@@ -109,6 +114,11 @@
 		this.sunrisePosition = SunCalc.getPosition(this.sunriseTime, this.mylat, this.mylong);
 		this.sunriseAltitude = this.toDegree(this.sunrisePosition.altitude).toFixed(2);
 		this.sunriseAzimuth = this.toDegree(this.sunrisePosition.azimuth).toFixed(2);
+
+		this.sunSetTime = SunCalc.getTimes(new Date(),this.mylat, this.mylong).sunset;
+		var sunSetPosition=SunCalc.getPosition(this.sunSetTime, this.mylat, this.mylong);
+		this.sunSetAzimuth = this.toDegree(sunSetPosition.azimuth).toFixed(2);
+
 		},
 	mymap(){
         var latlng = new L.LatLng(this.mylat, this.mylong);
@@ -130,23 +140,10 @@
 		
         this.mycircle=L.circle({"lat":this.mylat,"lng":this.mylong}, {radius: 200}).addTo(this.map);
  
-		this.myLine(ddd1,180+parseFloat(this.sunAzimuth));
+		this.mySunNowDraw(ddd1,180+parseFloat(this.sunAzimuth));
+		this.mySunRiseSet(ddd1,180+parseFloat(this.sunriseAzimuth),180+parseFloat(this.sunSetAzimuth));
 		
-		console.log(180+parseFloat(this.sunAzimuth));
-
 		this.mytimer()
-       	//this.sunLine=L.polyline([ddd1,ddd3],{color: '#ff0000',weight: 3}).addTo(this.map);
-        //this.sunLine=L.polyline([ddd1,ddd4],{color: '#00ff00',weight: 3}).addTo(this.map);
-        //this.sunLine=L.polyline([ddd1,ddd5],{color: '#00ff00',weight: 3}).addTo(this.map);
-        //this.sunLine=L.polyline([ddd1,ddd6],{color: '#ffff00',weight: 3}).addTo(this.map);
-        //this.sunLine=L.polyline([ddd1,ddd7],{color: '#00ffff',weight: 3}).addTo(this.map);
-        //this.sunLine=L.polyline([ddd1,ddd8],{color: '#00ff00',weight: 3}).addTo(this.map);		
-		//https://duckduckgo.com/?q=leaflet.js++bearing&t=lm&ia=web
-		//https://en.wikipedia.org/wiki/Bearing_(angle)
-		//https://duckduckgo.com/?t=lm&q=lcalculate+lart+long+for+specific+angle+and+distance&ia=web
-		//https://stackoverflow.com/questions/3225803/calculate-endpoint-given-distance-bearing-starting-point
-		//http://www.movable-type.co.uk/scripts/latlong.html
-		//https://mathworld.wolfram.com/SphericalTrigonometry.html
 
 		},
 	toRadian(degree) {
@@ -157,6 +154,7 @@
 		},
 	myLine(startPoint,myangle){
 		//https://stackoverflow.com/questions/3225803/calculate-endpoint-given-distance-bearing-starting-point
+		
 		var mydistance=0.5;//km
 		var initialBearingRadians=this.toRadian(myangle);
 		const radiusEarthKilometres = 6371.01;
@@ -172,16 +170,28 @@
 		var endLatRads = Math.asin((startLatSin * distRatioCosine) + (startLatCos * distRatioSine * Math.cos(initialBearingRadians)));
 		var endLonRads = startLonRad + Math.atan2(Math.sin(initialBearingRadians) * distRatioSine * startLatCos, distRatioCosine - startLatSin * Math.sin(endLatRads));
 		var endPoint=[this.toDegree(endLatRads),this.toDegree(endLonRads)];
+
+		return endPoint
+		},
+		mySunNowDraw(startPoint,myangle){
+		var endPoint=this.myLine(startPoint,myangle)
 		if (this.sunCircleMarker) {this.map.removeLayer(this.sunCircleMarker);}
 		if (this.sunLine) {this.map.removeLayer(this.sunLine);}
 		this.sunLine=L.polyline([startPoint,endPoint],{color: '#ff0000',weight: 4,opacity:0.3,fillOpacity:0.3}).addTo(this.map);
 		this.sunCircleMarker = L.circle({"lat":endPoint[0],"lng":endPoint[1]}, {radius: 80,color: 'red',fillColor: 'red',fillOpacity:0.7,opacity:0.3}).addTo(this.map);
-		return endPoint	
 		},
-		mySunRiseSunSet(){
-			var ddd1=[this.mylat, this.mylong];
-			this.myLine(ddd1,180+parseFloat(this.sunriseAzimuth))
-
+		mySunRiseSet(startPoint,myangle1,myangle2){
+		var endPoint1=this.myLine(startPoint,myangle1)
+		var endPoint2=this.myLine(startPoint,myangle2)
+		if (this.sunRiseLine) {this.map.removeLayer(this.sunRiseLine);}
+		this.sunRiseLine=L.polyline([startPoint,endPoint1],{color: 'yellow',weight: 10,opacity:0.3,fillOpacity:0.3}).addTo(this.map);
+		this.sunRiseLine.bindPopup("sunriseTime.getHours()+':'+sunriseTime.getMinutes()");
+		
+		if (this.sunSetLine) {this.map.removeLayer(this.sunSetLine);}
+		this.sunSetLine=L.polyline([startPoint,endPoint2],{color: 'brown',weight: 10,opacity:0.3,fillOpacity:0.3}).addTo(this.map);
+		
+		//if (this.sunRiseMarker) {this.map.removeLayer(this.sunRiseMarker);}
+		//this.sunRiseMarker = L.circle({"lat":endPoint[0],"lng":endPoint[1]}, {radius: 30,color: 'yellow',fillColor: 'yellow',fillOpacity:0.7,opacity:0.3}).addTo(this.map);
 		},
 	mytimer(){
         setInterval(()=>{ 
