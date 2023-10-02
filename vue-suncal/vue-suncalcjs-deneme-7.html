@@ -137,7 +137,7 @@
 		if (this.currentLocationMarker) {this.map.removeLayer(this.currentLocationMarker);}
 		if (this.mycircle) {this.map.removeLayer(this.mycircle);}
         this.currentLocationMarker = L.marker(latlng,{draggable:'true'}).addTo(this.map);
-        this.currentLocationMarker.on('dragend', this.my_marker_drag);
+        
 		
         this.mycircle=L.circle({"lat":this.mylat,"lng":this.mylong}, {radius: 200}).addTo(this.map);
  
@@ -145,6 +145,7 @@
 		this.mySunRiseSet(ddd1,180+parseFloat(this.sunriseAzimuth),180+parseFloat(this.sunSetAzimuth));
 		
 		this.mytimer()
+		this.currentLocationMarker.on('dragend', this.my_marker_drag);
 
 		},
 	toRadian(degree) {
@@ -189,16 +190,17 @@
 		this.sunRiseLine=L.polyline([startPoint,endPoint1],{color: 'yellow',weight: 10,opacity:0.3,fillOpacity:0.3}).addTo(this.map);		
 		this.sunSetLine=L.polyline([startPoint,endPoint2],{color: 'brown',weight: 10,opacity:0.3,fillOpacity:0.3}).addTo(this.map);
 		
+		var popupContent = "Güneş Doğumu"+"<br>"+String(this.sunriseTime.getHours())+":"+String(this.sunriseTime.getMinutes())
+		this.sunRiseLine.bindPopup(popupContent).openPopup();
+		console.log(this.sunriseTime);
+		
 		this.mylayer.addLayer(this.sunSetLine);
 		this.mylayer.addLayer(this.sunRiseLine);
 		
 		for (let iii = myangle1; iii < myangle2; iii++) {
 			var sss=L.polyline([startPoint,this.myLine(startPoint,iii)],{color: 'yellow',weight: 10,opacity:0.1,fillOpacity:0.1}).addTo(this.map);
-			console.log(iii);
 			this.mylayer.addLayer(sss);
 								}
-		
-
 		},
 	mytimer(){
         setInterval(()=>{ 
@@ -212,6 +214,7 @@
 		  console.log(event.target.getLatLng());
 		  this.mylat=event.target.getLatLng().lat.toFixed(6);
 		  this.mylong=event.target.getLatLng().lng.toFixed(6);
+		  this.mysun();
 		  this.mymap()		  
 		  }
       },
