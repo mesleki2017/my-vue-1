@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr@4/dist/flatpickr.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr@4/dist/flatpickr.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue-flatpickr-component@11"></script>
+
+</head>
+
+	<div id = "app">
+	<flat-pickr v-model="mydate" :config="pickerConfig"></flat-pickr>
+	<div>{{mydate}}</div>
+	
+	</div>
+<script>
+	//https://github.com/ankurk91/vue-flatpickr-component
+         const app = Vue.createApp({
+  data() {
+    return {
+      mydate:new Date(),
+      pickerConfig: {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i", // Tarih ve saat formatı
+        minuteIncrement: 15, // Dakika aralığı
+        time_24hr: true, // 24 saatlik saat formatı kullanılıyor mu?
+        minDate: "today", // Min. seçilebilir tarih
+        maxDate: "2025-12-31", // Max. seçilebilir tarih
+      }
+    }
+  },
+  computed: {
+
+  }
+         });
+    app.component('flat-pickr', VueFlatpickr.default);
+    app.mount("#app")
+</script>
+
+
+</html>

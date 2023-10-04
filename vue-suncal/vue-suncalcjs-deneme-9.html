@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet.js Example with Current Location, Marker, and Sun Circle</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    
+
+	<script src="https://unpkg.com/leaflet-swoopy"></script>
+	<script src="https://cdn.osmbuildings.org/4.1.1/OSMBuildings.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+	<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/flatpickr@4/dist/flatpickr.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr@4/dist/flatpickr.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue-flatpickr-component@11"></script>
+
+
+
+    <style>
+  div{ margin: 5px;}
+  button{ margin: 10px;}
+  .aaa{
+    background-color: rgb(229, 255, 0);
+  }
+  .bbb{
+    background-color: rgb(60, 255, 0);
+  }
+          #map {
+            width: 100%;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+	
+    <div id="app">
+		
+    
+    
+    <div class="notification is-primary">
+		<flat-pickr v-model="myNewDate" :config="pickerConfig"></flat-pickr>
+         <p>Girilen Tarih ve Zaman: {{ myNewDate }}</p>
+	<div class="columns is-vcentered">
+		<button class="button is-info" v-on:click='konum'>Şuanki Konum</button>
+		<mycmp1 title="lat-long" :body="mylat+','+mylong"></mycmp1>
+		<mycmp1  title="NOW" :body="'sunAltitude : '+sunAltitude+'\n'+'sunAzimuth : '+sunAzimuth"></mycmp1>
+		<mytable :data=["sunriseTime",sunriseTime.getHours()+':'+sunriseTime.getMinutes()]> </mytable>
+		<mytable :data=["sunriseAltitude",sunriseAltitude]> </mytable>
+		<mytable :data=["sunriseAzimuth",sunriseAzimuth]> </mytable>
+		<div>{{mytime2}} - {{mylive}}</div>
+		
+		
+	</div>
+
+		<div class="content">
+		<div id="map"></div>
+		</div>
+	
+	</div>
+	
+    </div>
+
+
+    <script>
+        
+        	const app = Vue.createApp({
+    data() {
+      return {
+		mylong:" -------- ",
+		mylat:" --------- ",
+		mylatlong:"6666",
+		mytime:new Date(),
+		mytime2:null,
+		myinterval:null,
+		myNewDate:null,
+		mylive:"konum butonuna basın",
+		sunPosition:"",
+		sunAltitude:"",
+		sunAzimuth:"",
+		sunriseTime:new Date("0"),
+		sunrisePosition:"",
+		sunriseAltitude:"",
+		sunriseAzimuth:"",
+		sunSetTime:new Date("0"),
+		sunSetAzimuth:"",
+		map:null,
+		currentLocationMarker: null,
+		sunCircleMarker: null,
+		sunLine:null,
+		sunRiseMarker:null,
+		sunRiseLine:null,
+		sunSetLine:null,
+		mycircle:null,
+		mylayer:null,
+		options :{
+			  enableHighAccuracy: true,
+			  timeout: 5000,
+			  maximumAge: 0},
+		pickerConfig: {
+			enableTime: true,
+			dateFormat: "Y-m-d H:i", // Tarih ve saat formatı
+			minuteIncrement: 15, // Dakika aralığı
+			time_24hr: true, // 24 saatlik saat formatı kullanılıyor mu?
+			minDate: "2020-12-31", // Min. seçilebilir tarih
+			maxDate: "2025-12-31", // Max. seçilebilir tarih
+      }
+      }
+    },
+    methods:{
+      konum(){
+			navigator.geolocation.getCurrentPosition(this.success, this.error, this.options)
+      },
+     success(position) {
+                    this.mylong=position.coords.longitude.toFixed(6);
+                    this.mylat=position.coords.latitude.toFixed(6);
+                    this.mysun();
+                    this.mymap();
+                    },
+	error(err) {console.warn(`MYERROR(${err.code}): ${err.message}`);},
+	mysun(){
+		this.sunPosition = SunCalc.getPosition(this.mytime, this.mylat, this.mylong);
+		this.sunAltitude= this.toDegree(this.sunPosition.altitude).toFixed(2);
+		this.sunAzimuth = this.toDegree(this.sunPosition.azimuth).toFixed(2);
+		
+		this.sunriseTime = SunCalc.getTimes(this.mytime,this.mylat, this.mylong).sunrise;
+		this.sunrisePosition = SunCalc.getPosition(this.sunriseTime, this.mylat, this.mylong);
+		this.sunriseAltitude = this.toDegree(this.sunrisePosition.altitude).toFixed(2);
+		this.sunriseAzimuth = this.toDegree(this.sunrisePosition.azimuth).toFixed(2);
+
+		this.sunSetTime = SunCalc.getTimes(this.mytime,this.mylat, this.mylong).sunset;
+		var sunSetPosition=SunCalc.getPosition(this.sunSetTime, this.mylat, this.mylong);
+		this.sunSetAzimuth = this.toDegree(sunSetPosition.azimuth).toFixed(2);
+
+		},
+	mymap(){
+ 
+        this.mylayer.clearLayers();
+        
+        var myLatLng=[this.mylat, this.mylong];
+        
+		this.map.setView(myLatLng, 16);
+		
+        this.currentLocationMarker = L.marker(myLatLng,{draggable:'true'}).addTo(this.map);
+        this.mycircle=L.circle({"lat":this.mylat,"lng":this.mylong}, {radius: 200}).addTo(this.map);
+        
+        this.mylayer.addLayer(this.currentLocationMarker);
+        this.mylayer.addLayer(this.mycircle);
+ 
+		this.mySunNowDraw(myLatLng,180+parseFloat(this.sunAzimuth));
+		this.mySunRiseSet(myLatLng,180+parseFloat(this.sunriseAzimuth),180+parseFloat(this.sunSetAzimuth));
+		
+		this.mytimer()
+		this.currentLocationMarker.on('dragend', this.my_marker_drag);
+
+		},
+	toRadian(degree) {
+    return degree*Math.PI/180;
+		},
+	toDegree(radian) {
+    return radian*180/Math.PI;
+		},
+	myLine(startPoint,myangle){
+		//https://stackoverflow.com/questions/3225803/calculate-endpoint-given-distance-bearing-starting-point
+		
+		var mydistance=0.5;//km
+		var initialBearingRadians=this.toRadian(myangle);
+		const radiusEarthKilometres = 6371.01;
+		var distRatio = mydistance / radiusEarthKilometres;
+		var distRatioSine = Math.sin(distRatio);
+		var distRatioCosine = Math.cos(distRatio);
+		var startLatRad =this.toRadian(startPoint[0]);
+		var startLonRad =this.toRadian(startPoint[1]);
+		var startLatCos = Math.cos(startLatRad);
+		var startLatSin = Math.sin(startLatRad);
+		
+
+		var endLatRads = Math.asin((startLatSin * distRatioCosine) + (startLatCos * distRatioSine * Math.cos(initialBearingRadians)));
+		var endLonRads = startLonRad + Math.atan2(Math.sin(initialBearingRadians) * distRatioSine * startLatCos, distRatioCosine - startLatSin * Math.sin(endLatRads));
+		var endPoint=[this.toDegree(endLatRads),this.toDegree(endLonRads)];
+
+		return endPoint
+		},
+	mySunNowDraw(startPoint,myangle){
+		var endPoint=this.myLine(startPoint,myangle)
+		if (this.sunCircleMarker) {this.map.removeLayer(this.sunCircleMarker);}
+		if (this.sunLine) {this.map.removeLayer(this.sunLine);}
+		this.sunLine=L.polyline([startPoint,endPoint],{color: '#ff0000',weight: 4,opacity:0.3,fillOpacity:0.3}).addTo(this.map);
+		this.sunCircleMarker = L.circle({"lat":endPoint[0],"lng":endPoint[1]}, {radius: 80,color: 'red',fillColor: 'red',fillOpacity:0.7,opacity:0.3}).addTo(this.map);
+		},
+	mySunRiseSet(startPoint,myangle1,myangle2){
+		
+		var endPoint1=this.myLine(startPoint,myangle1)
+		var endPoint2=this.myLine(startPoint,myangle2)
+
+		this.sunRiseLine=L.polyline([startPoint,endPoint1],{color: 'yellow',weight: 10,opacity:0.3,fillOpacity:0.3}).addTo(this.map);		
+		this.sunSetLine=L.polyline([startPoint,endPoint2],{color: 'brown',weight: 10,opacity:0.3,fillOpacity:0.3}).addTo(this.map);
+		
+		var popupContent = "Güneş Doğumu"+"<br>"+String(this.sunriseTime.getHours())+":"+String(this.sunriseTime.getMinutes())
+		this.sunRiseLine.bindPopup(popupContent).openPopup();
+		
+		this.mylayer.addLayer(this.sunSetLine);
+		this.mylayer.addLayer(this.sunRiseLine);
+		
+		for (let iii = myangle1; iii < myangle2; iii++) {
+			var sss=L.polyline([startPoint,this.myLine(startPoint,iii)],{color: 'yellow',weight: 10,opacity:0.1,fillOpacity:0.1}).addTo(this.map);
+			this.mylayer.addLayer(sss);
+								}
+		},
+	mytimer(){
+        this.myinterval=setInterval(()=>{
+		this.mylive="canlı"
+		var myLatLng=[this.mylat, this.mylong];
+        this.mytime=new Date();
+		this.mysun();
+		this.mySunNowDraw(myLatLng,180+parseFloat(this.sunAzimuth));
+        
+      }, 1000);
+      },
+      my_marker_drag(event){
+		  console.log(event.target.getLatLng());
+		  this.mylat=event.target.getLatLng().lat.toFixed(6);
+		  this.mylong=event.target.getLatLng().lng.toFixed(6);
+		  this.mysun();
+		  this.mymap()		  
+		  },
+		 format(value, event) {
+			return moment(value).format('YYYY-MM-DD')
+			}
+      },
+    computed :{
+		
+		},
+	beforeMount() {
+    },
+    mounted(){	
+		this.map = L.map('map').setView([51.505, -0.09], 16);
+		        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(this.map);
+        this.mylayer = new L.LayerGroup();
+        this.mylayer.addTo(this.map);
+        //L.Control.geocoder().addTo(this.map);
+		},
+	watch: {
+		myNewDate(newValue){
+			this.mylayer.clearLayers();
+			clearInterval(this.myinterval);
+			this.mylive="saat akışı durduruldu";
+			this.mytime=new Date(newValue);
+			var myLatLng=[this.mylat, this.mylong];
+		  	this.mysun();
+			this.mySunNowDraw(myLatLng,180+parseFloat(this.sunAzimuth));
+			this.mySunRiseSet(myLatLng,180+parseFloat(this.sunriseAzimuth),180+parseFloat(this.sunSetAzimuth));
+		  console.log("lkjlkjlkj");
+			},
+		mytime(newValue){
+			this.mytime2=moment(newValue).format('HH:mm:ss');
+			}
+		
+	}
+  });
+app.component("mycmp1",{
+	props: ['title','body'],
+		 template: `
+		 <div class="column is-2">
+				<article  class="message"> 
+                   <div class="message-header">{{ title }}</div>
+                   <div class="message-body">{{ body }}</div>
+                   
+				</article>
+		</div>
+				`
+	});
+app.component('mytime1', {
+	 template: `
+      <div class="level" >
+        <div >
+          <p class="heading">Tarih</p>
+          <span class="title">{{myTime().toLocaleDateString()}}</span>
+          <p >{{myTime().getHours() +":"+myTime().getMinutes() }}</p>
+        </div>
+      </div>
+            `
+              ,
+    methods:{
+      myTime(){
+        const mytime=new Date();
+        return mytime
+      }
+    }
+});
+app.component("mytable",{
+	props: ['data'],
+		 template: `
+		 <div>
+			 <tbody>
+		 <table class="table is-bordered">
+		<td>{{data[0]}}</td>
+		<td>{{data[1]}}</td>
+		</table>
+		</tbody>
+		</div>
+	`,
+	methods:{}
+	
+	});
+const mypick=app.component('flat-pickr', VueFlatpickr.default);
+const MyComponent = app.component('mycmp1') 
+const MyClock = app.component('mytime')
+const MyTable = app.component('mytable') 
+
+
+app.mount('#app')
+
+    </script>
+</body>
+</html>

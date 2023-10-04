@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr@4/dist/flatpickr.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr@4/dist/flatpickr.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue-flatpickr-component@11"></script>
+
+</head>
+
+	<div id = "app">
+  <p>Full Name: {{ fullName }}</p>
+  <p>
+    <label for="firstName">First Name: </label>
+    <input id="firstName" type="text" v-model="firstName">
+  </p>
+  <p>
+    <label for="lastName">Last Name: </label>
+    <input id="lastName" type="text" v-model="lastName">
+  </p>
+	
+	<flat-pickr v-model="date"/>
+	
+	</div>
+<script>
+	//https://github.com/ankurk91/vue-flatpickr-component
+         const app = Vue.createApp({
+  data() {
+    return {
+      firstName: '',
+      lastName: '',
+      date:new Date()
+    }
+  },
+  computed: {
+    fullName() {
+      return this.firstName + ' ' + this.lastName
+    }
+  }
+         });
+    app.component('flat-pickr', VueFlatpickr.default);
+    app.mount("#app")
+</script>
+
+
+</html>

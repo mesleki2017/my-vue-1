@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+</head>
+
+	<div id = "app">
+		 Kilometers : <input type = "text" v-model = "kilometers1">
+		 Meters : <input type = "text" v-model = "meters1">
+		<div>---------------------------------</div>
+		<div>sayi1 ={{this.sayi1}}</div><input type = "text" v-model = "sayi1">
+		<div>sayı 1 in karekoku </div>
+		<div>sayi2 ={{this.sayi2}}</div>
+	
+	
+	</div>
+<script>
+         const app = Vue.createApp({
+            data() {
+				return {
+               kilometers1 : 0,
+               meters1:0,
+               sayi1:0,
+               sayi2:0
+		   }
+            },
+            methods: {
+            },
+            computed :{
+            },
+            watch : {
+               kilometers1(newValue,oldValue){
+				console.log("km  new :",newValue,"  old :",oldValue)
+                  this.meters1 = newValue * 1000;
+               },
+               meters1(newValue,oldValue) {
+				  console.log("mt  new :",newValue,"  old :",oldValue)
+                  this.kilometers1 = newValue/ 1000;
+               },
+               sayi1(newValue){
+				   this.sayi2=Math.sqrt(newValue)
+				   }
+            }
+         });
+         app.mount('#app')
+</script>
+
+
+</html>
