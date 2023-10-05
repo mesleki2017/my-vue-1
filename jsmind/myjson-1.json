@@ -1,0 +1,52 @@
+SMIND_DATA_SAMPLE = {
+    meta: {},
+    format: 'node_tree',
+data: {
+    id: 'root',
+    topic: 'Leaflet89898.js',
+    children: [
+        {
+            id: 'overview',
+            topic: 'Overview',
+            direction: 'left',
+            children: [
+                { id: 'overview1', topic: 'Introduction to Leaflet.js', link: 'https://leafletjs.com/' },
+                { id: 'overview2', topic: 'Features and Benefits', link: 'https://leafletjs.com/features.html' },
+                { id: 'overview3', topic: 'Getting Started', link: 'https://leafletjs.com/examples/quick-start/' },
+                { id: 'overview4', topic: 'Creating a Simple Map', link: 'https://leafletjs.com/examples/quick-start/' },
+            ],
+        },
+        {
+            id: 'maps',
+            topic: 'Maps and Layers',
+            direction: 'right',
+            children: [
+                { id: 'maps1', topic: 'Adding Maps to Your Website', link: 'https://leafletjs.com/examples/quick-start/' },
+                { id: 'maps2', topic: 'Working with Map Tiles', link: 'https://leafletjs.com/examples/quick-start/' },
+                { id: 'maps3', topic: 'Overlaying Markers and Popups', link: 'https://leafletjs.com/examples/quick-start/' },
+                { id: 'maps4', topic: 'Customizing Map Layers', link: 'https://leafletjs.com/examples/quick-start/' },
+            ],
+        },
+        {
+            id: 'interactivity',
+            topic: 'User Interaction',
+            direction: 'right',
+            children: [
+                { id: 'interactivity1', topic: 'Handling User Events', link: 'https://leafletjs.com/examples/quick-start/' },
+                { id: 'interactivity2', topic: 'Adding Interactivity to Markers', link: 'https://leafletjs.com/examples/quick-start/' },
+                { id: 'interactivity3', topic: 'Using Controls and Plugins', link: 'https://leafletjs.com/plugins.html' },
+            ],
+        },
+        {
+            id: 'geolocation',
+            topic: 'Geolocation and Routing',
+            direction: 'left',
+            children: [
+                { id: 'geolocation1', topic: 'Integrating Geolocation', link: 'https://leafletjs.com/examples/mobile/' },
+                { id: 'geolocation2', topic: 'Creating Routes and Directions', link: 'https://leafletjs.com/examples/routing-machine/' },
+            ],
+        },
+    ],
+}
+,
+};
