@@ -12,14 +12,15 @@
     </head>
     <body>
 		<div id="app">
-			<div>
+			<div class="column">
+				<div class="column is-one-fifth">
 				<button class="button is-info" v-on:click='save_file'>save_file</button>
 				<button class="button is-info" v-on:click='open_empty' >open_empty</button>
-				<input id="file_input_nodearray" type="file" @change="open_file1"/>open1</li>
-				<input id="file_input_nodearray2" type="file" @change="open_file2"/>open2</li>
-				
-				<div id="jsmind_container1"></div>
+				<input class="input" id="file_input_nodearray" type="file" @change="open_file1"/>open1</li>
+				<input class="input" id="file_input_nodearray2" type="file" @change="open_file2"/>open2</li>
+				</div>
 			</div>
+			<div id="jsmind_container1"></div>
 		</div>
     <script type="text/javascript">
 		//http://hizzgdev.github.io/jsmind/example/2_features.html
