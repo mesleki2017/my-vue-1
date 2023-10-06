@@ -1,0 +1,103 @@
+<html>
+    <head>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/jsmind@0.7.1/style/jsmind.css" rel="stylesheet"/>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jsmind@0.7.1/es6/jsmind.js"></script>
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <script src="myjson-1.json"></script>
+        <!--
+            enable draggable node feature
+            <script type="text/javascript" src="//cdn.jsdelivr.net/npm/jsmind@0.7.1/es6/jsmind.draggable-node.js"></script>
+        -->
+    </head>
+    <body>
+		<div id="app">
+			<div>
+				<button class="button is-info" v-on:click='save_file'>save_file</button>
+				<button class="button is-info" v-on:click='open_empty' >open_empty</button>
+				<input id="file_input_nodearray" type="file" @change="open_file1"/>open1</li>
+				<input id="file_input_nodearray2" type="file" @change="open_file2"/>open2</li>
+				
+				<div id="jsmind_container1"></div>
+			</div>
+		</div>
+    <script type="text/javascript">
+		//http://hizzgdev.github.io/jsmind/example/2_features.html
+			const app = Vue.createApp({
+				data() {
+					return {
+						data1 : SMIND_DATA_SAMPLE,
+						data2:mydata2,
+						jm:null,
+						file: null,
+						deneme:"aaaa"
+						}
+					},
+				methods:{
+					open_empty() {
+							this.jm.show();
+							console.log("open empty")
+						},
+					
+					load_jsmind(data,container) {
+								var options = {
+									container: container,
+									editable: true,
+									theme: 'primary',
+								};
+								this.jm = new jsMind(options);
+								this.jm.show(data);
+									},
+					save_file() {
+					var mind_data = this.jm.get_data();
+					var mind_name = mind_data.meta.name;
+					var mind_str = jsMind.util.json.json2string(mind_data);
+					jsMind.util.file.save(mind_str, 'text/jsmind', mind_name + '.json');
+				},
+				open_file1() {
+					var file_input = document.getElementById('file_input_nodearray');
+					var files = file_input.files;
+						if (files.length > 0) {
+							var file_data = files[0];
+							const reader = new FileReader();
+							reader.onload = (res) => {
+							  var mind = jsMind.util.json.string2json(res.target.result);
+							  this.data2=mind;
+							};
+							reader.readAsText(file_data);
+							
+		
+							
+						} 
+					},
+						open_file2() {
+							var file_input = document.getElementById('file_input_nodearray2');
+							var files = file_input.files;
+							if (files.length > 0) {
+								var file_data = files[0];
+								jsMind.util.file.read(file_data, function (jsmind_data, jsmind_name) {
+									var mind = jsMind.util.json.string2json(jsmind_data);
+									this.data2=mind
+							}.bind(this));// bind ilk defa kullandim
+								
+								}
+							
+							}
+					},
+				mounted(){
+					this.load_jsmind(this.data2,"jsmind_container1");
+					},
+				watch: {
+					data2(newValue){
+					console.log(newValue)
+					this.jm.show(newValue)
+					}
+					
+					
+					}
+				});
+		app.mount('#app')	
+		
+        </script>
+    </body>
+</html>

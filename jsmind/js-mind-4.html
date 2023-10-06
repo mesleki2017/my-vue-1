@@ -1,5 +1,6 @@
 <html>
     <head>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
         <link href="https://cdn.jsdelivr.net/npm/jsmind@0.7.1/style/jsmind.css" rel="stylesheet"/>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jsmind@0.7.1/es6/jsmind.js"></script>
         <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -11,30 +12,37 @@
     </head>
     <body>
 		<div id="app">
-        <div id="jsmind_container"></div>
+			<div>
+
+				<div id="jsmind_container1"></div>
+				<div id="jsmind_container2"></div>
+			</div>
 		</div>
-        <script type="text/javascript">
+    <script type="text/javascript">
+		//http://hizzgdev.github.io/jsmind/example/2_features.html
 			const app = Vue.createApp({
 				data() {
 					return {
-						data : SMIND_DATA_SAMPLE,
+						data1 : SMIND_DATA_SAMPLE,
 						data2:mydata1
 						}
 					},
 				methods:{
-					load_jsmind() {
+					load_jsmind(data,container) {
                 var options = {
-                    container: 'jsmind_container',
+                    container: container,
                     editable: true,
                     theme: 'primary',
                 };
                 var jm = new jsMind(options);
-                jm.show(this.data2);
+                jm.show(data);
 					}
+
 					
 					},
 				mounted(){
-					this.load_jsmind();
+					this.load_jsmind(this.data1,"jsmind_container1");
+					this.load_jsmind(this.data2,"jsmind_container2");
 					}
 				});
 		app.mount('#app')	
