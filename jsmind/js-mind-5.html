@@ -12,13 +12,11 @@
     </head>
     <body>
 		<div id="app">
-			<div class="column">
-				<div class="column is-one-fifth">
+			<div class="columns">
 				<button class="button is-info" v-on:click='save_file'>save_file</button>
 				<button class="button is-info" v-on:click='open_empty' >open_empty</button>
-				<input class="input" id="file_input_nodearray" type="file" @change="open_file1"/>open1</li>
-				<input class="input" id="file_input_nodearray2" type="file" @change="open_file2"/>open2</li>
-				</div>
+				<input class="input" id="file_input_nodearray" type="file" @change="open_file1"/>
+				<input class="input" id="file_input_nodearray2" type="file" @change="open_file2"/>
 			</div>
 			<div id="jsmind_container1"></div>
 		</div>
