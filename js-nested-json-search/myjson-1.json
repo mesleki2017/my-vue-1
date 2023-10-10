@@ -1,0 +1,170 @@
+SMIND_DATA_SAMPLE = {
+    meta: {},
+    format: 'node_tree',
+data: {
+    id: 'root',
+    topic: 'Leaflet89898.js',
+    children: [
+        {
+            id: 'overview',
+            topic: 'Overview',
+            direction: 'left',
+            children: [
+                { id: 'overview1', topic: 'Introduction to Leaflet.js', link: 'https://leafletjs.com/' },
+                { id: 'overview2', topic: 'Features and Benefits', link: 'https://leafletjs.com/features.html' },
+                { id: 'overview3', topic: 'Getting Started', link: 'https://leafletjs.com/examples/quick-start/' },
+                { id: 'overview4', topic: 'Creating a Simple Map', link: 'https://leafletjs.com/examples/quick-start/' },
+            ],
+        },
+        {
+            id: 'maps',
+            topic: 'Maps and Layers',
+            direction: 'right',
+            children: [
+                { id: 'maps1', topic: 'Adding Maps to Your Website', link: 'https://leafletjs.com/examples/quick-start/' },
+                { id: 'maps2', topic: 'Working with Map Tiles', link: 'https://leafletjs.com/examples/quick-start/' },
+                { id: 'maps3', topic: 'Overlaying Markers and Popups', link: 'https://leafletjs.com/examples/quick-start/' },
+                { id: 'maps4', topic: 'Customizing Map Layers', link: 'https://leafletjs.com/examples/quick-start/' },
+            ],
+        },
+        {
+            id: 'interactivity',
+            topic: 'User Interaction',
+            direction: 'right',
+            children: [
+                { id: 'interactivity1', topic: 'Handling User Events', link: 'https://leafletjs.com/examples/quick-start/' },
+                { id: 'interactivity2', topic: 'Adding Interactivity to Markers', link: 'https://leafletjs.com/examples/quick-start/' },
+                { id: 'interactivity3', topic: 'Using Controls and Plugins', link: 'https://leafletjs.com/plugins.html' },
+            ],
+        },
+        {
+            id: 'geolocation',
+            topic: 'Geolocation and Routing',
+            direction: 'left',
+            children: [
+                { id: 'geolocation1', topic: 'Integrating Geolocation', link: 'https://leafletjs.com/examples/mobile/' },
+                { id: 'geolocation2', topic: 'Creating Routes and Directions', link: 'https://leafletjs.com/examples/routing-machine/' },
+            ],
+        },
+    ],
+}
+,
+};
+
+mydata1={
+    meta: {
+		name: "electrical_car"
+		},
+    format: 'node_tree',
+data: {
+    id: 'root',
+    topic: 'Electric Cars',
+    children: [
+        {
+            id: 'advantages',
+            topic: 'Advantages',
+            direction: 'left',
+            children: [
+                { id: 'advantage1', topic: 'Environmentally Friendly' },
+                { id: 'advantage2', topic: 'Energy Efficiency' },
+                { id: 'advantage3', topic: 'Low Operating Costs' },
+                { id: 'advantage4', topic: 'Reduced Noise Pollution' },
+                {
+                    'id': 'advantage5',
+                    'background-image': 'https://pngimg.com/uploads/electric_car/electric_car_PNG62.png',
+                    'width': '100',
+                    'height': '100',
+                },
+            ],
+        },
+        {
+            id: 'brands',
+            topic: 'Popular Brands',
+            direction: 'right',
+            children: [
+                {
+                    'id': 'brand1',
+                    'topic': 'Tesla',
+                    'background-color': '#eee',
+                    'foreground-color': 'blue',
+                },
+                { id: 'brand2', topic: 'Nissan Leaf' },
+                { id: 'brand3', topic: 'Chevrolet Bolt' },
+            ],
+        },
+        {
+            id: 'technology',
+            topic: 'Innovative Technology',
+            direction: 'right',
+            children: [
+                { id: 'tech1', topic: 'Lithium-ion Batteries' },
+                { id: 'tech2', topic: 'Regenerative Braking' },
+                { id: 'tech3', topic: 'Autonomous Driving' },
+            ],
+        },
+        {
+            id: 'charging',
+            topic: 'Charging Infrastructure',
+            direction: 'left',
+            children: [
+                { id: 'charging1', topic: 'Home Charging Stations' },
+                { id: 'charging2', topic: 'Public Charging Networks' },
+            ],
+        },
+    ],
+}
+,
+};
+mydata2={
+    "meta": {},
+    "format": "node_tree",
+    "data": {
+        "id": "root",
+        "topic": "Solar Panel Usage Examples",
+        "children": [
+            {
+                "id": "residential",
+                "topic": "Residential Applications",
+                "direction": "left",
+                "children": [
+                    { "id": "residential1", "topic": "Installing Solar Panels on a Home", "link": "https://www.example.com/installing-solar-panels" },
+                    { "id": "residential2", "topic": "Benefits of Solar Energy for Homeowners", "link": "https://www.example.com/solar-energy-benefits" },
+                    { "id": "residential3", "topic": "Solar Panel Financing Options", "link": "https://www.example.com/solar-panel-financing" },
+                    { "id": "residential4", "topic": "Solar Panel Maintenance Tips", "link": "https://www.example.com/solar-panel-maintenance" }
+                ]
+            },
+            {
+                "id": "commercial",
+                "topic": "Commercial and Industrial Use",
+                "direction": "right",
+                "children": [
+                    { "id": "commercial1", "topic": "Solar Power for Businesses", "link": "https://www.example.com/solar-power-for-businesses" },
+                    { "id": "commercial2", "topic": "Large-Scale Solar Installations", "link": "https://www.example.com/large-scale-solar-installations" },
+                    { "id": "commercial3", "topic": "Solar Energy in Agriculture", "link": "https://www.example.com/solar-energy-in-agriculture" },
+                    { "id": "commercial4", "topic": "Solar Energy for Factories", "link": "https://www.example.com/solar-energy-for-factories" }
+                ]
+            },
+            {
+                "id": "innovations",
+                "topic": "Solar Innovations",
+                "direction": "right",
+                "children": [
+                    { "id": "innovations1", "topic": "Emerging Solar Technologies", "link": "https://www.example.com/emerging-solar-technologies" },
+                    { "id": "innovations2", "topic": "Solar-Powered Transportation", "link": "https://www.example.com/solar-powered-transportation" },
+                    { "id": "innovations3", "topic": "Solar-Powered Gadgets", "link": "https://www.example.com/solar-powered-gadgets" },
+                    { "id": "innovations4", "topic": "Solar Energy Storage Solutions", "link": "https://www.example.com/solar-energy-storage" }
+                ]
+            },
+            {
+                "id": "environment",
+                "topic": "Environmental Impact",
+                "direction": "left",
+                "children": [
+                    { "id": "environment1", "topic": "Reducing Carbon Footprint with Solar", "link": "https://www.example.com/solar-carbon-footprint" },
+                    { "id": "environment2", "topic": "Solar Energy and Wildlife Conservation", "link": "https://www.example.com/solar-energy-wildlife" }
+                ]
+            }
+        ]
+    }
+}
+

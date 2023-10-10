@@ -1,0 +1,125 @@
+<html>
+    <head>
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    </head>
+    <body>
+        <div id="app"> 
+			
+		<input type="text" v-model="search" placeholder="Search" /> <br> <br>
+		<ol>
+        <li v-for="item in myfilter" >{{item}}</li>
+        </ol>
+        
+        </div>
+
+        <script type="text/javascript">
+	var mydata1={
+		meta: {
+			name: "electrical_car"
+			},
+		format: 'node_tree',
+	data: {
+		id: 'root',
+		topic: 'Electric Cars',
+		children: [
+			{
+				id: 'advantages',
+				topic: 'Advantages',
+				direction: 'left',
+				children: [
+					{ id: 'advantage1', topic: 'Environmentally Friendly' },
+					{ id: 'advantage2', topic: 'Energy Efficiency' },
+					{ id: 'advantage3', topic: 'Low Operating Costs' },
+					{ id: 'advantage4', topic: 'Reduced Noise Pollution' },
+					{
+						'id': 'advantage5',
+						'background-image': 'https://pngimg.com/uploads/electric_car/electric_car_PNG62.png',
+						'width': '100',
+						'height': '100',
+					},
+				],
+			},
+			{
+				id: 'brands',
+				topic: 'Popular Brands',
+				direction: 'right',
+				children: [
+					{
+						'id': 'brand1',
+						'topic': 'Tesla',
+						'background-color': '#eee',
+						'foreground-color': 'blue',
+					},
+					{ id: 'brand2', topic: 'Nissan Leaf' },
+					{ id: 'brand3', topic: 'Chevrolet Bolt' },
+				],
+			},
+			{
+				id: 'technology',
+				topic: 'Innovative Technology',
+				direction: 'right',
+				children: [
+					{ id: 'tech1', topic: 'Lithium-ion Batteries' },
+					{ id: 'tech2', topic: 'Regenerative Braking' },
+					{ id: 'tech3', topic: 'Autonomous Driving' },
+				],
+			},
+			{
+				id: 'charging',
+				topic: 'Charging Infrastructure',
+				direction: 'left',
+				children: [
+					{ id: 'charging1', topic: 'Home Charging Stations' },
+					{ id: 'charging2', topic: 'Public Charging Networks' },
+				],
+			},
+		],
+	}
+	,
+	};
+	
+const app = Vue.createApp({
+					data() {
+					return {
+						data1: mydata1,
+						myarray:[],
+						search: "",
+
+						}
+					},
+					methods:{
+						iterateObject(obj) {
+							   for(prop in obj) {
+								if(typeof(obj[prop]) == "object"){
+									this.iterateObject(obj[prop]);
+								} else {
+									if(prop == "topic") {
+									  this.myarray.push({"id":obj["id"],"topic":obj["topic"]})
+								  }
+								}
+							  }
+							},
+						
+						},
+					watch: {
+						
+						},
+					computed:{
+						myfilter() {
+								  return this.myarray.filter(p => {
+									return p.topic.toLowerCase().indexOf(this.search.toLowerCase()) != -1;
+								  });
+								}
+						
+						},
+					mounted(){
+					this.iterateObject(this.data1)
+					}
+	});
+app.mount('#app')		
+	
+	
+	
+        </script>
+    </body>
+</html>

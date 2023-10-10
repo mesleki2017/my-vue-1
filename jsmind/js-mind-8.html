@@ -42,8 +42,10 @@
 				</div>
 			</nav>
 			<div class="box">
+				<input type="text" v-model="searchQuery" placeholder="Search" />
 			node id:  <a>{{ deneme.id }} </a>
 			node topic:  <a>{{ deneme.topic }}</a>
+				<div v-for="zzz in resultQuery">{{zzz}}</div>
 			</div>
 			<div class="box">
 				<div @click="nodeClick" id="jsmind_container1"></div>
@@ -59,7 +61,8 @@
 						data2:mydata2,
 						jm:null,
 						file: null,
-						deneme:"aaaa"
+						deneme:"aaaa",
+						searchQuery: null
 						}
 					},
 				methods:{
@@ -141,9 +144,21 @@
 					},
 				computed: {
 					mynode(){
-
 						return "gggg"
 						this.deneme="ttt"
+					},
+				resultQuery(){
+					  if(this.searchQuery){
+						  console.log("search");
+						  const gg=[this.data2.data.children];
+						  return gg.filter(p => {
+							  console.log("search filter");
+							  console.log(gg[0]);
+							  return gg;
+							  
+							  });
+						
+					  }
 					}
   					}			
 				});

@@ -1,0 +1,93 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+        ></script>
+    </head>
+    <body>
+        <div> nested json data search</div>
+
+        <script type="text/javascript">
+	var mydata1={
+		meta: {
+			name: "electrical_car"
+			},
+		format: 'node_tree',
+	data: {
+		id: 'root',
+		topic: 'Electric Cars',
+		children: [
+			{
+				id: 'advantages',
+				topic: 'Advantages',
+				direction: 'left',
+				children: [
+					{ id: 'advantage1', topic: 'Environmentally Friendly' },
+					{ id: 'advantage2', topic: 'Energy Efficiency' },
+					{ id: 'advantage3', topic: 'Low Operating Costs' },
+					{ id: 'advantage4', topic: 'Reduced Noise Pollution' },
+					{
+						'id': 'advantage5',
+						'background-image': 'https://pngimg.com/uploads/electric_car/electric_car_PNG62.png',
+						'width': '100',
+						'height': '100',
+					},
+				],
+			},
+			{
+				id: 'brands',
+				topic: 'Popular Brands',
+				direction: 'right',
+				children: [
+					{
+						'id': 'brand1',
+						'topic': 'Tesla',
+						'background-color': '#eee',
+						'foreground-color': 'blue',
+					},
+					{ id: 'brand2', topic: 'Nissan Leaf' },
+					{ id: 'brand3', topic: 'Chevrolet Bolt' },
+				],
+			},
+			{
+				id: 'technology',
+				topic: 'Innovative Technology',
+				direction: 'right',
+				children: [
+					{ id: 'tech1', topic: 'Lithium-ion Batteries' },
+					{ id: 'tech2', topic: 'Regenerative Braking' },
+					{ id: 'tech3', topic: 'Autonomous Driving' },
+				],
+			},
+			{
+				id: 'charging',
+				topic: 'Charging Infrastructure',
+				direction: 'left',
+				children: [
+					{ id: 'charging1', topic: 'Home Charging Stations' },
+					{ id: 'charging2', topic: 'Public Charging Networks' },
+				],
+			},
+		],
+	}
+	,
+	};
+var myarray=[]
+//https://www.easyprogramming.net/javascript/recursive_nested_json_function.php
+function iterateObject(obj) {
+   for(prop in obj) {
+  	if(typeof(obj[prop]) == "object"){
+    	iterateObject(obj[prop]);
+    } else {
+    	if(prop == "topic") {
+      	  // console.log(obj["id"],"--",obj["topic"])
+      	  myarray.push({"id":obj["id"],"topic":obj["topic"]})
+      }
+    }
+  }
+}
+iterateObject(mydata1)
+console.log(myarray)
+        </script>
+    </body>
+</html>
