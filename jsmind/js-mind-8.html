@@ -37,20 +37,24 @@
 					</div>
 					<div class="navbar-item">
 						<input class="input" id="file_input_nodearray" type="file" @change="open_file1"/>
-						<input class="input" id="file_input_nodearray2" type="file" @change="open_file2"/>
 					</div>
 				</div>
 			</nav>
+
 			<div class="box">
-				<input type="text" v-model="searchQuery" placeholder="Search" />
 			node id:  <a>{{ deneme.id }} </a>
 			node topic:  <a>{{ deneme.topic }}</a>
-				<div v-for="zzz in resultQuery">{{zzz}}</div>
-			</div>
+			</div>	
+			
 			<div class="box">
 				<div @click="nodeClick" id="jsmind_container1"></div>
 			</div>
-
+			<div class="card">
+				<input type="text" v-model="searchQuery" placeholder="Search" />
+						<ol>
+							<li v-for="item in myfilter" >{{item}}</li>
+						</ol>
+			</div>
 		</div>
     <script type="text/javascript">
 		//http://hizzgdev.github.io/jsmind/example/2_features.html
@@ -62,13 +66,28 @@
 						jm:null,
 						file: null,
 						deneme:"aaaa",
-						searchQuery: null
+						searchQuery:"",
+						myarray:[],
 						}
 					},
 				methods:{
+					iterateObject(obj) {
+								
+							   for(prop in obj) {
+								if(typeof(obj[prop]) == "object"){
+									this.iterateObject(obj[prop]);
+								} else {
+									if(prop == "topic") {
+									  this.myarray.push({"id":obj["id"],"topic":obj["topic"]})
+								  }
+								}
+							  }
+							},
 					open_empty() {
 							this.jm.show();
-							console.log("open empty")
+							this.myarray=[];
+							this.data2=this.jm.get_data();
+							console.log(this.jm.get_data())
 						},
 					
 					load_jsmind(data,container) {
@@ -87,6 +106,7 @@
 					jsMind.util.file.save(mind_str, 'text/jsmind', mind_name + '.json');
 				},
 				open_file1() {
+					this.myarray=[];
 					var file_input = document.getElementById('file_input_nodearray');
 					var files = file_input.files;
 						if (files.length > 0) {
@@ -102,64 +122,45 @@
 							
 						} 
 					},
-						open_file2() {
-							var file_input = document.getElementById('file_input_nodearray2');
-							var files = file_input.files;
-							if (files.length > 0) {
-								var file_data = files[0];
-								jsMind.util.file.read(file_data, function (jsmind_data, jsmind_name) {
-									var mind = jsMind.util.json.string2json(jsmind_data);
-									this.data2=mind
-							}.bind(this));// bind ilk defa kullandim
-								
-								}
-							
-							},
-							zoomIn() {
-								this.jm.view.zoom_in()
-							},
-							zoomOut() {
-								this.jm.view.zoom_out()
-							},
-							 nodeClick () {
-								 
-								 const selectedNode = this.jm.get_selected_node();
-								 if ( !!selectedNode ){
-								 console.log(selectedNode);
-								 this.deneme=selectedNode ;
-					
-								 }
-								 }
+	
+					zoomIn() {
+						this.jm.view.zoom_in()
+					},
+					zoomOut() {
+						this.jm.view.zoom_out()
+					},
+					 nodeClick () {
+						 
+						 const selectedNode = this.jm.get_selected_node();
+						 if ( !!selectedNode ){
+						 console.log(selectedNode);
+						 this.deneme=selectedNode ;
+			
+						 }
+						 }
 
 					},
 				mounted(){
 					this.load_jsmind(this.data2,"jsmind_container1");
+					this.iterateObject(this.data2)
+					
 					},
 				watch: {
 					data2(newValue){
-					console.log(newValue)
+					console.log("*-*-*-*-*-*")
 					this.jm.show(newValue)
+					this.iterateObject(newValue)
+					console.log(newValue)
 					},
 					deneme(newValue){console.log("sdfs")}
 					},
 				computed: {
-					mynode(){
-						return "gggg"
-						this.deneme="ttt"
-					},
-				resultQuery(){
-					  if(this.searchQuery){
-						  console.log("search");
-						  const gg=[this.data2.data.children];
-						  return gg.filter(p => {
-							  console.log("search filter");
-							  console.log(gg[0]);
-							  return gg;
-							  
-							  });
-						
-					  }
-					}
+					myfilter() {
+						return this.myarray.filter(p => {
+							return p.topic.toLowerCase().indexOf(this.searchQuery.toLowerCase()) != -1;
+								  });
+								},
+					
   					}			
 				});
 		app.mount('#app')	
