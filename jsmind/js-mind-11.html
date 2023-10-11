@@ -1,0 +1,230 @@
+<html>
+    <head>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/jsmind@0.7.1/style/jsmind.css" rel="stylesheet"/>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jsmind@0.7.1/es6/jsmind.js"></script>
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <script src="myjson-1.json"></script>
+        <!--
+            enable draggable node feature
+            <script type="text/javascript" src="//cdn.jsdelivr.net/npm/jsmind@0.7.1/es6/jsmind.draggable-node.js"></script>
+        -->
+    </head>
+	<style>
+		#jsmind_container1 {
+                border: solid 1px #ccc;
+                background: #f4f4f4;
+            }
+              tr {
+  width: 20%;
+  box-sizing: border-box; /* Subtracts both border-sides */
+  
+}
+tbody {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+tbody:not(:empty) {
+  margin: 0 0 1px 1px;
+}
+	</style>
+    <body>
+		<div id="app">
+			<nav class="navbar" role="navigation" aria-label="main navigation">
+				<div class="navbar-item">
+					<div class="navbar-item">
+						<button class="bd-tw-button button" v-on:click='save_file'>save_file</button>
+					</div>
+					<div class="navbar-item">
+						<button class="button is-primary" v-on:click='open_empty' >open_empty</button>
+						<button class="button is-primary" v-on:click='changeColor' >change color</button>
+						
+					</div>
+					
+					<div class="navbar-item has-dropdown is-hoverable">
+						<a class="navbar-link">zoom</a>
+						<div class="navbar-dropdown">
+							
+							<button class="navbar-item" id="zoom-in-button" style="width: 50px" v-on:click="zoomIn">+</button>
+							<button class="navbar-item" id="zoom-in-button" style="width: 50px" v-on:click="zoomOut">-</button>
+						</div>
+					</div>
+					<div class="navbar-item">
+						<input class="input" id="file_input_nodearray" type="file" @change="open_file1"/>
+					</div>
+				</div>
+			</nav>
+
+			<div class="box">
+			node id:  <a>{{ myNodeSelect.id }} </a>
+			node topic:  <a>{{ myNodeSelect.topic }}</a>
+			<input type="text" v-model="searchQuery" placeholder="Search" />
+			</div>	
+			
+			<div class="box">
+				<div @dblclick='mydoubleclick' @click="nodeClick"  @keyup.enter="myEnterEvent" id="jsmind_container1"></div>
+			</div>
+			
+			<div class="table-responsive">
+				<table class="table">
+					<tbody>
+                    <tr v-for="item in myfilter">
+                        <td><my-component title="" :body="item.topic" ></my-component></td> 
+                    </tr>
+                </tbody>
+				</table>
+			</div>
+		</div>
+    <script type="text/javascript">
+		//http://hizzgdev.github.io/jsmind/example/2_features.html
+			const app = Vue.createApp({
+				data() {
+					return {
+						data2:mydata2,
+						jm:null,
+						file: null,
+						myNodeSelect:"aaaa",
+						searchQuery:"",
+						myarray:[],
+						}
+					},
+				methods:{
+					iterateObject(obj) {
+							   for(prop in obj) {
+								if(typeof(obj[prop]) == "object"){
+									this.iterateObject(obj[prop]);
+								} else {
+									if(prop == "topic") {
+									  this.myarray.push({"id":obj["id"],"topic":obj["topic"]})
+								  }
+								}
+							  }
+							},
+					open_empty() {
+						this.jm.show();
+						this.data2=this.jm.get_data();
+						},
+					
+					load_jsmind(data,container) {
+						var options = {
+							container: container,
+							editable: true,
+							theme: 'primary',
+							support_html:true
+							};
+							this.jm = new jsMind(options);
+							this.jm.show(data);
+							},
+					save_file() {
+						
+						var mind_data = this.jm.get_data();
+						var mind_name = mind_data.meta.name;
+						var mind_str = jsMind.util.json.json2string(mind_data);
+						jsMind.util.file.save(mind_str, 'text/jsmind', mind_name + '.json');
+							},
+						open_file1() {
+							var file_input = document.getElementById('file_input_nodearray');
+							var files = file_input.files;
+							if (files.length > 0) {
+								var file_data = files[0];
+								jsMind.util.file.read(file_data, function (jsmind_data, jsmind_name) {
+									var mind = jsMind.util.json.string2json(jsmind_data);
+									this.data2=mind
+							}.bind(this));// bind ilk defa kullandim
+								
+								}
+							
+							},
+	
+					zoomIn() {
+						this.jm.view.zoom_in()
+					},
+					zoomOut() {
+						this.jm.view.zoom_out()
+					},
+					nodeClick () {	 
+						const selectedNode = this.jm.get_selected_node();
+						if ( !!selectedNode ){
+							this.myNodeSelect=selectedNode ;
+							//this.jm.update_node(this.myNodeSelect.id, '--- modified ---');
+							 this.jm.scroll_node_to_center(this.myNodeSelect)
+							}
+						else{
+							console.log("not node click");
+							//this.data2=this.jm.get_data();
+							//this.iterateObject(this.data2)
+							
+							}
+							},
+					changeColor(){
+						console.log("*/*/*/*/*")
+						this.jm.set_node_color(this.myarray[0]["id"],"orange",'#ccc')
+					},
+					mydoubleclick(){
+						console.log("double")
+						const selectedNode = this.jm.get_selected_node();
+						if ( !!selectedNode ){
+							console.log("double click do something")
+							}
+					},
+					myEnterEvent(){
+							this.data2=this.jm.get_data();
+							}
+					},
+				mounted(){
+					this.load_jsmind(this.data2,"jsmind_container1");
+					this.iterateObject(this.data2)
+					
+					},
+				watch: {
+					data2(newValue){
+						this.myarray=[];
+						this.jm.show(newValue)
+						this.iterateObject(newValue)
+						console.log("hhhh")
+					},
+					myNodeSelect(newValue){console.log("sdfs")}
+					},
+				computed: {
+					myfilter() {
+						console.log(this.myarray);
+						const mySearchResult= this.myarray.filter(p => {
+							return p.topic.toLowerCase().indexOf(this.searchQuery.toLowerCase()) != -1;
+								  });
+
+							//find the diffrence myarray-mysearchresult
+							//https://stackoverflow.com/questions/1187518/how-to-get-the-difference-between-two-arrays-in-javascript
+							let difference = this.myarray.filter(x => !mySearchResult.includes(x));
+							
+							if(mySearchResult){
+								for(const mmm of mySearchResult) {
+									this.jm.set_node_color(mmm["id"],"green",'#ccc')
+								}
+							};
+							if(difference){
+								for(const nnn of difference) {
+									this.jm.set_node_color(nnn["id"],"red",'#ccc')
+								}
+							};
+							return mySearchResult
+								},
+						
+					
+  					}			
+				});
+				
+app.component('my-component', {
+	 props: ['title','body'],
+	 template: `<article class="message"> 
+                   <div class="has-background-success" class="message-header">{{ title }}</div>
+                   <div class="has-background-grey-lighter" class="message-body">{{ body }}</div>
+                   
+              </article>`
+});
+const MyComponent = app.component('my-component') 
+app.mount('#app')	
+		
+        </script>
+    </body>
+</html>
