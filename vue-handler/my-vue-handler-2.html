@@ -40,7 +40,8 @@
 		<my-component  title="deviceorientation" :body="mytxt2"></my-component>
   </div>
     <div class="column">
-		<my-component @mousemove="myevent1" title="aaa" :body="mytxt2"></my-component>
+		<button v-on:click='mypermission'> click</button>
+		<my-component title="aaa" :body="mytxt2"></my-component>
   </div>
   </div>
 </div>
@@ -84,14 +85,23 @@
 			},
 		myevent5(e){
 			console.log(e);
-			this.mytxt2="alpha "+e.alpha.toFixed(2)+", beta "+e.beta.toFixed(2)+", gamma "+e.gamma.toFixed(2);
+			this.mytxt2="alp"+e.alpha.toFixed(2)+", bt"+e.beta.toFixed(2)+", gam"+e.gamma.toFixed(2);
 			},
 		myClick() {
 			//https://itnext.io/gyro-web-accessing-the-device-orientation-in-javascript-387da43eeb84
 			//https://trekhleb.dev/blog/2021/gyro-web/
 			//https://w3c.github.io/deviceorientation/#deviceorientation
 				window.addEventListener('deviceorientation', this.myevent5);
-				}
+				},
+		mypermission () {
+					console.log(typeof(DeviceOrientationEvent));
+					
+					DeviceOrientationEvent.requestPermission.then( response => {
+						if ( response == "granted" ) {
+							window.addEventListener( 'deviceorientation', this.myevent5)
+						}
+					}).catch( console.log("hata") )
+			}
 		  }
 	})
 app.component('my-component', {
