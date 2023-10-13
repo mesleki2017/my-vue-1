@@ -63,7 +63,7 @@ tbody:not(:empty) {
 			</div>	
 			
 			<div class="box">
-				<div @dblclick='mydoubleclick' @click="nodeClick"  @keydup.enter="myEnterEvent" id="jsmind_container1"></div>
+				<div contenteditable="true"  @dblclick='mydoubleclick' @click="nodeClick"  @paste="myEnterEvent"  id="jsmind_container1"></div>
 			</div>
 			
 			<div class="table-responsive">
@@ -108,13 +108,46 @@ tbody:not(:empty) {
 					
 					load_jsmind(data,container) {
 						var options = {
-							container: container,
-							editable: true,
-							theme: 'primary',
-							support_html:true
+							   container :container, 			// [required] ID of the container
+							   editable : true, 		// Is editing enabled?
+							   theme : null, 			// theme
+							   mode :'full', 			// display mode
+							   support_html : true, 	// Does it support HTML elements in the node?
+							   view:{
+								   engine: 'canvas', 	// engine for drawing lines between nodes in the mindmap
+								   hmargin:100, 		// Minimum horizontal distance of the mindmap from the outer frame of the container
+								   vmargin:50, 			// Minimum vertical distance of the mindmap from the outer frame of the container
+								   line_width:2, 		// thickness of the mindmap line
+								   line_color:'#555', 	// Thought mindmap line color
+								   line_style:'curved', // line style, straight or curved
+								   draggable: false,    // Drag the mind map with your mouse, when it's larger that the container
+								   hide_scrollbars_when_draggable: false, // Hide container scrollbars, when mind map is larger than container and draggable option is true.
+								   node_overflow: 'hidden' // Text overflow style in node
+							   },
+							   layout:{
+								   hspace:30, 			// Horizontal spacing between nodes
+								   vspace:20, 			// Vertical spacing between nodes
+								   pspace:13,			// Horizontal spacing between node and connection line (to place node expander)
+								   cousin_space:0			// Additional vertical spacing between child nodes of neighbor nodes
+							   }, 
+							   shortcut:{
+								   enable:true, 		// whether to enable shortcut
+								   handles:{}, 			// Named shortcut key event processor
+								   mapping:{ 			// shortcut key mapping
+									   addchild : [45, 4096+13], 	// <Insert>, <Ctrl> + <Enter>
+									   addbrother : 13, // <Enter>
+									   editnode : 113, 	// <F2>
+									   delnode : 46, 	// <Delete>
+									   toggle : 32, 	// <Space>
+									   left : 37, 		// <Left>
+									   up : 38, 		// <Up>
+									   right : 39, 		// <Right>
+									   down : 40, 		// <Down>
+								   }
+							   },
 							};
-							this.jm = new jsMind(options);
-							this.jm.show(data);
+						this.jm = new jsMind(options);
+						this.jm.show(data);
 							},
 					save_file() {
 						var mind_name = this.data2.data.topic;
@@ -166,9 +199,12 @@ tbody:not(:empty) {
 							console.log("double click do something")
 							}
 					},
-					myEnterEvent(){
-							this.data2=this.jm.get_data();
-							}
+					myEnterEvent(e){
+							//this.data2=this.jm.get_data();
+							console.log("enter");
+							console.log(e);
+							},
+
 					},
 				mounted(){
 					this.load_jsmind(this.data2,"jsmind_container1");

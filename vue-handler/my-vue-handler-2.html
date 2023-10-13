@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myvue1</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+<style>
+</style>
+</head>
+<body>
+	<div id="app" >
+
+	<div class="columns ">
+  <div class="column">
+	  <my-component @mouseover="myevent1"  @mouseleave="myevent1" title="mouseover mouseleave " :body="mytxt1"></my-component>
+  </div>
+  <div class="column">
+	  <my-component @click="myevent1" @dblclick="myevent1" title="click dblclick" :body="mytxt1"></my-component>
+  </div>
+  <div class="column">
+	  <my-component @contextmenu="myevent2" title="Click right mouse button" :body="mytxt1"></my-component>
+  </div>
+  <div class="column">
+	  <my-component @mousemove="myevent3" title="mousemove" :body="mytxt1"></my-component>
+  </div>
+  
+  </div>
+  <div class="columns">
+  <div class="column is-one-quarter">
+		<my-component @copy="myevent4" title="copy" :body="'asdf -------' + mytxt1"></my-component>
+  </div>
+    <div class="column">
+		<my-component @pointermove="myevent5" title="pointermove" :body="mytxt2"></my-component>
+  </div>
+    <div class="column">
+		<my-component @mousemove="myevent1" title="aaa" :body="mytxt2"></my-component>
+  </div>
+    <div class="column">
+		<my-component @mousemove="myevent1" title="aaa" :body="mytxt2"></my-component>
+  </div>
+  </div>
+</div>
+	
+	
+	</div>
+
+</body>	
+<script type="module">	
+	const app = Vue.createApp({
+	  data() {
+		return {
+		  mytxt1:"-------- ",
+		  mytxt2:"---------- ",
+		}
+	  },
+	  methods: {	
+		myevent1(e){
+			console.log(e);
+			this.mytxt1=e.type;
+			},
+		myevent2(e){
+			console.log(e);
+			this.mytxt1=e.type;
+			alert("https://stackoverflow.com/questions/4909167/how-to-add-a-custom-right-click-menu-to-a-webpage");
+			e.preventDefault();
+			},
+		myevent3(e){
+			console.log(e);
+			this.mytxt1="top:"+e.clientY+"px;left:"+e.clientX+"px";
+			},
+		myevent4(e){
+			//https://developer.mozilla.org/en-US/docs/Web/API/Element/copy_event
+			const selection = document.getSelection();
+			console.log(e);
+			this.mytxt1=selection.toString()
+			e.clipboardData.setData("text/plain", selection.toString());
+			event.preventDefault();
+			},
+		myevent5(e){
+			console.log(e);
+			this.mytxt2="top:"+e.clientY+"px;left:"+e.clientX+"px";
+			}
+		  }
+	})
+app.component('my-component', {
+	 props: ['title','body'],
+	 template: `<article class="message is-info"> 
+                   <div class="message-header">{{ title }}</div>
+                   <div class="message-body">{{ body }}</div>
+                   
+              </article>`
+});
+const MyComponent = app.component('my-component') 
+app.mount('#app')
+
+
+</script>
+
+</html>
