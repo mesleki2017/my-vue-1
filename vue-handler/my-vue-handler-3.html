@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>myvue1</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+	<style>
+	</style>
+</head>
+
+<body>
+	<div id="app">
+
+		<div class="columns ">
+			<div class="column">
+				<my-component @mouseover="myevent1" @mouseleave="myevent1" title="mouseover mouseleave " :body="mytxt1">
+				</my-component>
+			</div>
+			<div class="column">
+				<my-component @click="myevent1" @dblclick="myevent1" title="click dblclick" :body="mytxt1">
+				</my-component>
+			</div>
+			<div class="column">
+				<my-component @contextmenu="myevent2" title="Click right mouse button" :body="mytxt1"></my-component>
+			</div>
+			<div class="column">
+				<my-component @mousemove="myevent3" title="mousemove" :body="mytxt2"></my-component>
+			</div>
+
+		</div>
+		<div class="columns">
+			<div class="column">
+				<my-component @copy="myevent4" title="copy" :body="'asdf -------' + mytxt1"></my-component>
+			</div>
+			<div class="column">
+				<my-component @pointermove="myevent3" title="pointermove" :body="mytxt2"></my-component>
+			</div>
+			<div class="column">
+				<button v-on:click='myClick'> click</button>
+				<my-component title="deviceorientation" :body="mytxt2"></my-component>
+			</div>
+			<div class="column">
+				<button v-on:click='konum_al'> click</button>
+				<my-component title="konum" :body="konum"></my-component>
+			</div>
+		</div>
+		<div class="columns">
+			<div class="column">
+				<button v-on:click='click_for_motion'> click</button>
+				<my-component title="devicemotion" :body="mytxt1"></my-component>
+			</div>
+			<div class="column">
+				<my-component @pointermove="myevent3" title="---" :body="mytxt2"></my-component>
+			</div>
+			<div class="column">
+				<my-component title="---" :body="mytxt2"></my-component>
+			</div>
+			<div class="column">
+				<my-component title="---" :body="mytxt2"></my-component>
+			</div>
+		</div>
+	</div>
+
+
+	</div>
+
+</body>
+<script type="module">
+	//https://w3c.github.io/deviceorientation/#worked-example
+	//https://itnext.io/gyro-web-accessing-the-device-orientation-in-javascript-387da43eeb84
+	const app = Vue.createApp({
+		data() {
+			return {
+				mytxt1: "-------- ",
+				mytxt2: "---------- ",
+				konum:[]
+			}
+		},
+		methods: {
+			myevent1(e) {
+				console.log(e);
+				this.mytxt1 = e.type;
+			},
+			myevent2(e) {
+				console.log(e);
+				this.mytxt1 = e.type;
+				alert("https://stackoverflow.com/questions/4909167/how-to-add-a-custom-right-click-menu-to-a-webpage");
+				e.preventDefault();
+			},
+			myevent3(e) {
+				console.log(e);
+				this.mytxt2 = "top:" + e.clientY.toFixed(2) + "px;left:" + e.clientX.toFixed(2) + "px";
+			},
+			myevent4(e) {
+				//https://developer.mozilla.org/en-US/docs/Web/API/Element/copy_event
+				const selection = document.getSelection();
+				console.log(e);
+				this.mytxt1 = selection.toString()
+				e.clipboardData.setData("text/plain", selection.toString());
+				event.preventDefault();
+			},
+			myevent5(e) {
+				console.log(e);
+				this.mytxt2 = "alp" + e.alpha.toFixed(2) + ", bt" + e.beta.toFixed(2) + ", gam" + e.gamma.toFixed(2);
+			},
+			myClick() {
+				//https://itnext.io/gyro-web-accessing-the-device-orientation-in-javascript-387da43eeb84
+				//https://trekhleb.dev/blog/2021/gyro-web/
+				//https://w3c.github.io/deviceorientation/#deviceorientation
+				window.addEventListener('deviceorientation', this.myevent5);
+			},
+			click_for_motion() {
+				window.addEventListener('devicemotion', this.myevent6);
+			},
+			konum_al(){
+			navigator.geolocation.getCurrentPosition(this.konum_ok, this.konum_hata,{enableHighAccuracy: true,timeout:10000})
+      		},
+			konum_ok(mypossition){
+				this.konum=[mypossition.coords.latitude,mypossition.coords.longitude]
+			},
+			konum_hata(err){
+				return err
+			},
+			myevent6(e) {
+				console.log(e);
+				this.mytxt1 = e.type+" = "+e.acceleration.x + ' m/s2';
+			}
+		}
+	})
+	app.component('my-component', {
+		props: ['title', 'body'],
+		template: `<article class="message is-info"> 
+                   <div class="message-header">{{ title }}</div>
+                   <div class="message-body">{{ body }}</div>
+                   
+              </article>`
+	});
+	const MyComponent = app.component('my-component')
+	app.mount('#app')
+
+
+</script>
+
+</html>
