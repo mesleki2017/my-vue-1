@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myvue1</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+<style>
+	.modal {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  background-color: rgba(0,0,0,.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  width: 300px;
+  height: 300px;
+  padding: 5px;
+}
+</style>
+</head>
+<body>
+	<div id="app" >
+
+	  <my-component @click="open = true" title="click" :body="mytxt"></my-component>
+	<modal-button></modal-button>
+
+	
+	</div>
+
+</body>	
+<script type="module">	
+	const app = Vue.createApp({
+	  data() {
+		return {
+		  modalOpen: false
+		}
+	  },
+	  methods: {	
+		  }
+	})
+app.component('my-component', {
+	 props: ['title','body'],
+	 template: `<article class="message"> 
+                   <div class="has-background-success" class="message-header">{{ title }}</div>
+                   <div class="has-background-grey-lighter" class="message-body">{{ body }}</div>
+                   
+              </article>`
+});
+const MyComponent = app.component('my-component') 
+
+const Mymodalbutton =  app.component('modal-button', {
+  template: `
+    <button @click="modalOpen = true">open modal</button>
+    <teleport to="body">
+      <div v-if="modalOpen" class="modal">
+        <div>
+			<span> a teleported modal</span>
+          <button @click="modalOpen = false">Close</button>
+        </div>
+      </div>
+    </teleport>
+  `,
+  data() {
+    return { 
+      modalOpen: false
+    }
+  }
+})
+
+app.mount('#app')
+
+
+</script>
+
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myvue1</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+<style>
+	.modal {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  background-color: rgba(0,0,0,.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  width: 300px;
+  height: 300px;
+  padding: 5px;
+}
+.aaa{
+ position: absolute;
+  left: 50%;
+  top: 50%;	
+  transform: translate(-50%, -50%);
+	}
+</style>
+</head>
+<body>
+	<div id="app" >
+		<div class="container">
+			<modal-dialog v-bind:parent="selected" v-on:deneme22="selected=$event"></modal-dialog>
+			<div>{{selected}}</div>
+		</div>
+	</div>
+</body>	
+<script type="module">	
+	//https://v3.ru.vuejs.org/guide/teleport.html
+
+	const app = Vue.createApp({
+	  data() {
+		return {
+		  modalOpen: false,
+		  selected:"hgfhg"
+		}
+	  },
+	  emits :{
+		  deneme22:null
+		  },
+		methods: {	
+		  },
+		watch: {
+		}
+	});
+	
+
+
+const Mymodaldialog=  app.component('modal-dialog', {
+	props: ['parent'],
+	emits:["deneme22"],
+  template: `
+    <button @click="dialog.showModal()">open modal3</button>
+		<dialog id="favDialog">
+		  <form method="dialog">
+			<p>
+			  <label for="favAnimal">Favorite animal:</label>
+			  <select id="favAnimal" name="favAnimal" v-model="selected">
+				<option></option>
+				<option>Brine shrimp</option>
+				<option>Red panda</option>
+				<option>Spider monkey</option>
+			  </select>
+			</p>
+			<div>
+				<div>{{selected}}</div>
+			  <button v-on:click="aaa">Confirm</button>
+			</div>
+		  </form>
+		</dialog>
+
+  `,
+  data() {
+    return { 
+      dialog : null,
+	selected:null
+    }
+  },
+  methods:{
+	  aaa(){
+		  console.log("aaa");
+		  this.$emit('deneme22', this.selected);
+		  }
+	  },
+	  mounted(){
+		  this.dialog = document.getElementById("favDialog")
+		  },
+});
+app.mount('#app')
+</script>
+</html>
