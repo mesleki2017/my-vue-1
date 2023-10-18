@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myvue1</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+<style>
+
+</style>
+</head>
+<body>
+	<div id="app" >
+		<div class="field">
+			<modal-dialog  v-on:deneme22="myparentselected=$event"></modal-dialog>
+			<label class="label" >{{myparentselected}}</label>
+		</div>
+	</div>
+</body>	
+<script type="module">	
+	//https://v3.ru.vuejs.org/guide/teleport.html
+
+	const app = Vue.createApp({
+	  data() {
+		return {
+		  modalOpen: false,
+		  myparentselected:"hgfhg"
+		}
+	  },
+	  emits :{
+		  },
+		methods: {	
+		  },
+		watch: {
+		}
+	});
+	
+
+
+const Mymodaldialog=  app.component('modal-dialog', {
+	emits:["deneme22"],
+  template: `
+    <button class="button is-info" @click="dialog.showModal()">open modal3</button>
+		<dialog id="favDialog">
+		  <form method="dialog">
+			<p >
+			  <label class="label" for="favAnimal">Favorite animal:</label>
+			  <select class="select is-primary" id="favAnimal" name="favAnimal" v-model="selected">
+				<option></option>
+				<option>Brine shrimp</option>
+				<option>Red panda</option>
+				<option>Spider monkey</option>
+			  </select>
+			</p>
+			<div class="field">
+				<div>{{selected}}</div>
+				<button class="button">Close</button>
+			  <button class="button is-info" v-on:click="myemit">Confirm</button>
+			  
+			</div>
+		  </form>
+		</dialog>
+
+  `,
+  data() {
+    return { 
+      dialog : null,
+	selected:null
+    }
+  },
+  methods:{
+	  myemit(){
+		  console.log("aaa");
+		  this.$emit('deneme22', this.selected);
+		  }
+	  },
+	  mounted(){
+		  this.dialog = document.getElementById("favDialog")
+		  },
+});
+app.mount('#app')
+</script>
+</html>

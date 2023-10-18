@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myvue1</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma-rtl.min.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+<style>
+
+</style>
+</head>
+<body>
+	<div id="app" >
+		<div class="field">
+			<modal-dialog  v-on:deneme22="myparentselected=$event"></modal-dialog>
+			<label class="label" >{{myparentselected}}</label>
+		</div>
+	</div>
+</body>	
+<script type="module">	
+	//https://v3.ru.vuejs.org/guide/teleport.html
+
+	const app = Vue.createApp({
+	  data() {
+		return {
+		  modalOpen: false,
+		  myparentselected:"--------------------"
+		}
+	  },
+	  emits :{
+		  },
+		methods: {	
+		  },
+		watch: {
+		}
+	});
+	
+
+
+const Mymodaldialog=  app.component('modal-dialog', {
+	emits:["deneme22"],
+  template: `
+    <button class="button is-info" @click="dialog.showModal()">open modal3</button>
+	<dialog id="favDialog">
+		  <form method="dialog">
+<div class="field">
+  <label class="label">Name</label>
+  <div class="control">
+    <input v-model="user.name" class="input" type="text" placeholder="Text input">
+  </div>
+</div>
+
+<div class="field">
+  <label class="label">Username</label>
+  <div class="control">
+    <input v-model="user.surname" class="input is-success" type="text" placeholder="Text input">
+  </div>
+  <p class="help is-success">This username is available</p>
+</div>
+
+<div class="field">
+  <label class="label">Email</label>
+  <div class="control ">
+    <input v-model="user.email" class="input is-danger" type="email" placeholder="Email input">
+  </div>
+  <p class="help is-danger">This email is invalid</p>
+</div>
+
+<div class="field">
+  <label class="label">Subject</label>
+  <div class="control">
+    <div class="select">
+      <select v-model="user.selected">
+        <option>Select dropdown</option>
+        <option>With options</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div class="field">
+  <label class="label">Message</label>
+  <div class="control">
+    <textarea v-model="user.message" class="textarea" placeholder="Textarea"></textarea>
+  </div>
+</div>
+
+<div class="field">
+  <div class="control">
+    <label class="checkbox">
+      <input v-model="user.mycheck" type="checkbox">
+      I agree to the <a href="#">terms and conditions</a>
+    </label>
+  </div>
+</div>
+
+<div class="field">
+  <div class="control">
+    <label class="radio">
+      <input v-on:click="user.question='yes'" type="radio" name="question">
+      Yes
+    </label>
+    <label class="radio">
+      <input v-on:click="user.question='no'"  type="radio" name="question">
+      No
+    </label>
+  </div>
+</div>
+
+<div class="field is-grouped">
+  <div class="control">
+    <button class="button is-link" v-on:click="myemit">Submit</button>
+  </div>
+  <div class="control">
+    <button class="button is-link is-light">Cancel</button>
+  </div>
+</div>
+			
+		  </form>
+	<div>{{user.name}}  {{user.surname}}  {{user.email}}  {{user.selected}}  {{user.message}} {{user.mycheck}} {{user.question}}</div>	  
+</dialog>
+
+
+  `,
+  data() {
+    return { 
+      dialog : null,
+	user:{name:"",surname:"",email:"",selected:"",message:"",mycheck:"",question:""}
+    }
+  },
+  methods:{
+	  myemit(){
+		  console.log("aaa");
+		  this.$emit('deneme22', this.user);
+		  }
+	  },
+	  mounted(){
+		  this.dialog = document.getElementById("favDialog")
+		  },
+});
+app.mount('#app')
+</script>
+</html>
