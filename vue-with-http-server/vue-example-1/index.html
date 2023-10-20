@@ -1,0 +1,88 @@
+
+<!--
+https://eugenkiss.github.io/7guis/tasks/#flight
+-->
+
+<script type="module">
+import { createApp } from  'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+import TodoItem from './TodoItem.js'
+
+function stringToDate(str) {
+  const [y, m, d] = str.split('-')
+  return new Date(+y, m - 1, +d)
+}
+
+function dateToString(date) {
+  return (
+    date.getFullYear() +
+    '-' +
+    pad(date.getMonth() + 1) +
+    '-' +
+    pad(date.getDate())
+  )
+}
+
+function pad(n, s = String(n)) {
+  return s.length < 2 ? `0${s}` : s
+}
+
+createApp({
+	  components: {
+    TodoItem
+  },
+  data() {
+    return {
+      flightType: 'one-way flight',
+      departureDate: dateToString(new Date()),
+      returnDate: dateToString(new Date()),
+            groceryList: [
+        { id: 0, text: 'Vegetables46564' },
+        { id: 1, text: 'Cheese' },
+        { id: 2, text: 'Whatever else humans are supposed to eat' }]
+    }
+  },
+  computed: {
+    isReturn() {
+      return this.flightType === 'return flight'
+    },
+    canBook() {
+      return (
+        !this.isReturn ||
+        stringToDate(this.returnDate) > stringToDate(this.departureDate)
+      )
+    }
+  },
+  methods: {
+    book() {
+      alert(
+        this.isReturn
+          ? `You have booked a return flight leaving on ${this.departureDate} and returning on ${this.returnDate}.`
+        	: `You have booked a one-way flight leaving on ${this.departureDate}.`
+      )
+    }
+  }
+}).mount('#app')
+</script>
+<link rel="stylesheet" href="./style.css">
+
+<div id="app">
+  <select v-model="flightType">
+    <option value="one-way flight">One-way Flight</option>
+    <option value="return flight">Return Flight</option>
+  </select>
+
+  <input type="date" v-model="departureDate">
+  <input type="date" v-model="returnDate" :disabled="!isReturn">
+
+  <button :disabled="!canBook" @click="book">Book</button>
+
+  <p>{{ canBook ? '' : 'Return date must be after departure date.' }}</p>
+  
+    <ol>
+    <Todo-Item
+      v-for="item in groceryList"
+      :todo="item"
+      :key="item.id"
+    ></Todo-Item>
+  </ol>
+</div>

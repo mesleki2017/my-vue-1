@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="./style.css">
+    
+
+</head>
+<style>
+  .myflex{ 
+	  display: flex;
+	  flex-wrap: wrap;
+	  gap: 1rem;
+	   align-content: flex-start;
+	   flex-direction: column;
+	  
+	  }
+
+  .aaa{
+    background-color: aqua;
+    font-size: 2rem;
+
+  }
+  .bbb{
+    background-color: rgb(60, 255, 0);
+    font-size: 2rem;
+  }
+  .ccc{
+    background-color: green;
+  }
+    button{ 
+	  margin: 10px;
+	  }
+  input{ 
+	  margin: 10px;
+	  }
+</style>
+<body>
+    <div  id="app">
+		  <form id="search">
+			Search <input name="query" v-model="searchQuery">
+		  </form>
+		  <deneme1
+			:data="gridData"
+			:columns="gridColumns"
+			:filter-key="searchQuery">
+		  </deneme1>
+
+    </div>
+</body>
+<script src="./Grid.js" type="module"></script>
+<script type="module">
+	
+import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+import deneme1 from './Grid.js'
+
+createApp({
+  components: {
+    deneme1
+  },
+  data: () => ({
+    searchQuery: '',
+    gridColumns: ['name', 'power',"deneme"],
+    gridData: [
+      { name: 'Chuck Norris', power: Infinity ,deneme:100},
+      { name: 'Bruce Lee', power: 9000 ,deneme:100},
+      { name: 'Jackie Chan', power: 7000 ,deneme:500},
+      { name: 'Jet Li', power: 8000 ,deneme:100}
+    ]
+  })
+}).mount('#app')
+</script>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myvue1</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+
+<style>
+
+</style>
+</head>
+<body>
+	<div id="app" >
+		<div class="field">
+			<modal-dialog  v-on:deneme22="mychildtdata=$event"></modal-dialog>
+			
+
+			<div class="message-header">comes from child</div>
+			<div class="message-body">{{mychildtdata}}</div>
+		</div>
+	</div>
+</body>	
+
+<script type="module">	
+	//https://v3.ru.vuejs.org/guide/teleport.html
+	import { createApp,defineAsyncComponent } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+
+	const app = createApp({
+	  data() {
+		return {
+		  modalOpen: false,
+		  mychildtdata:"-------------",
+		  count:0
+		}
+	  },
+	  emits :{
+		  },
+		methods: {
+		  },
+		watch: {
+		}
+	});
+	
+
+
+const Mymodaldialog=  app.component('modal-dialog', {
+	emits:["deneme22"],
+  template: `
+    <button class="button is-info" @click="mydialog.showModal()">open modal3</button>
+	<dialog id="mydlg">
+		<textarea v-model="mydata" class="textarea" placeholder="Textarea"></textarea>
+		<div>{{mydata}}</div>
+		<button @click="mydialog.close()">Cancel</button>
+		<button @click="myemit">OK</button>
+	</dialog>
+
+  `,
+  data() {
+    return { 
+      mydialog : null,
+	mydata:null
+    }
+  },
+  methods:{
+	  myemit(){
+		  this.$emit('deneme22', this.mydata);
+		  this.mydialog.close('ok');
+		  }
+	  },
+	  mounted(){
+		  this.mydialog = document.getElementById("mydlg")
+		  },
+});
+app.mount('#app')
+</script>
+</html>
