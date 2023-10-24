@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>myvue1</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+	<style>
+	</style>
+</head>
+
+<body>
+	<div id="app">
+
+		<div class="columns ">
+			<div class="column">
+				<my-component  mpcx="50"  mpcy="150"> </my-component>
+			</div>
+
+		</div>
+		<div class="columns">
+		</div>
+		<div class="columns">
+		</div>
+	</div>
+
+
+	</div>
+
+</body>
+<script type="module">
+//https://jsfiddle.net/g2sout46/7/
+	const app = Vue.createApp({
+		data() {
+			return {
+				mytxt1: "-------- ",
+				mytxt2: "---------- ",
+				konum:[]
+			}
+		},
+		methods: {
+			myevent1(e) {
+				console.log(e);
+				this.mytxt1 = e.type;
+			},
+		}
+	})
+	app.component('my-component', {
+		props: ['mpcx', 'mpcy'],
+		template: `
+		<button v-on:click='aaa'> click</button>
+			<svg width="50" height="50">
+				<circle cx=0 cy=0 r="10"  fill="red"/>
+				<circle cx=0 cy=200 r="10"  fill="red"/>
+				<circle cx=200 cy=200 r="10"  fill="red"/>
+				<circle cx=200 cy=0 r="10"  fill="red"/>
+				
+				<rect width="100%" height="100%" fill="black" />
+			  <circle id="green-halo" r="10" stroke="green" stroke-width="4" fill="yellow"/>
+			</svg>
+              `
+             ,
+                 data() {
+    return { 
+	myx:0,
+	myy:0,
+	mycircle:null
+    }
+  },
+    methods:{
+		aaa(){
+		this.mycircle.setAttribute("cx", this.myx)
+		this.mycircle.setAttribute("cy", this.myy)
+		this.myx=this.myx+10;
+		this.myy=this.myy+10;
+		}
+		},
+	  mounted(){
+		  this.mycircle = document.getElementById('green-halo');
+		  this.mycircle.setAttribute("cx", this.mpcx)
+		this.mycircle.setAttribute("cy", this.mpcy)
+		  }
+	});
+	const MyComponent = app.component('my-component')
+	app.mount('#app')
+
+
+</script>
+
+</html>

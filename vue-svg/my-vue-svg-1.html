@@ -17,7 +17,7 @@
 
 		<div class="columns ">
 			<div class="column">
-				<my-component  mcx=50  :mcy="150"> </my-component>
+				<my-component  mpcx="50"  mpcy="150"> </my-component>
 			</div>
 
 		</div>
@@ -32,8 +32,7 @@
 
 </body>
 <script type="module">
-	//https://w3c.github.io/deviceorientation/#worked-example
-	//https://itnext.io/gyro-web-accessing-the-device-orientation-in-javascript-387da43eeb84
+//https://jsfiddle.net/g2sout46/7/
 	const app = Vue.createApp({
 		data() {
 			return {
@@ -50,13 +49,39 @@
 		}
 	})
 	app.component('my-component', {
-		props: ['mcx', 'mcy'],
+		props: ['mpcx', 'mpcy'],
 		template: `
-			<svg width="100" height="100">
-			  <circle cx={{mcx}} cy=50 r="40" stroke="green" stroke-width="4" fill="yellow" />
+		<button v-on:click='aaa'> click</button>
+			<svg width="200" height="200">
+				<circle cx=0 cy=0 r="10"  fill="red"/>
+				<circle cx=0 cy=200 r="10"  fill="red"/>
+				<circle cx=200 cy=200 r="10"  fill="red"/>
+				<circle cx=200 cy=0 r="10"  fill="red"/>
+
+			  <circle id="green-halo" r="10" stroke="green" stroke-width="4" fill="yellow"/>
 			</svg>
-			<div>{{mcx}}</div>
               `
+             ,
+                 data() {
+    return { 
+	myx:0,
+	myy:0,
+	mycircle:null
+    }
+  },
+    methods:{
+		aaa(){
+		this.mycircle.setAttribute("cx", this.myx)
+		this.mycircle.setAttribute("cy", this.myy)
+		this.myx=this.myx+10;
+		this.myy=this.myy+10;
+		}
+		},
+	  mounted(){
+		  this.mycircle = document.getElementById('green-halo');
+		  this.mycircle.setAttribute("cx", this.mpcx)
+		this.mycircle.setAttribute("cy", this.mpcy)
+		  }
 	});
 	const MyComponent = app.component('my-component')
 	app.mount('#app')
