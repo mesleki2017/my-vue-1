@@ -14,9 +14,11 @@
 
 <body>
 	<div id="app">
+		<button v-on:click='bbb'> click</button>
 
 		<div class="columns ">
 			<div class="column">
+				
 				<my-component  mpcx="50"  mpcy="150"> </my-component>
 			</div>
 
@@ -36,31 +38,33 @@
 	const app = Vue.createApp({
 		data() {
 			return {
-				mytxt1: "-------- ",
-				mytxt2: "---------- ",
-				konum:[]
+				xxx:0,
+				yyy:0
 			}
 		},
 		methods: {
-			myevent1(e) {
-				console.log(e);
-				this.mytxt1 = e.type;
+			bbb() {
+				this.xxx=this.xxx+10;
+				console.log(this.xxx);
+
 			},
 		}
 	})
 	app.component('my-component', {
+		emits:["deneme22"],
 		props: ['mpcx', 'mpcy'],
 		template: `
-		<button v-on:click='aaa'> click</button>
-			<svg width="50" height="50">
+		
+			<svg width="200" height="200">
 				<circle cx=0 cy=0 r="10"  fill="red"/>
 				<circle cx=0 cy=200 r="10"  fill="red"/>
 				<circle cx=200 cy=200 r="10"  fill="red"/>
 				<circle cx=200 cy=0 r="10"  fill="red"/>
 				
-				<rect width="100%" height="100%" fill="black" />
+			<rect width="100%" height="100%" fill="black" />
 			  <circle id="green-halo" r="10" stroke="green" stroke-width="4" fill="yellow"/>
 			</svg>
+			<div>{{mxy}}</div>
               `
              ,
                  data() {
@@ -72,7 +76,7 @@
   },
     methods:{
 		aaa(){
-		this.mycircle.setAttribute("cx", this.myx)
+		this.mycircle.setAttribute("cx", this.mxy)
 		this.mycircle.setAttribute("cy", this.myy)
 		this.myx=this.myx+10;
 		this.myy=this.myy+10;

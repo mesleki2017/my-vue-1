@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>myvue1</title>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<style>
+	</style>
+</head>
+<style>
+	div {
+		background : yellow;
+		color: red;
+		font-weight: bold;
+	}
+	div:hover {
+	 color: green;
+	}
+</style>
+<body>
+	<div id="app">
+		<button v-on:click='bbb'>parent click</button>
+		<div>this is data comes from child to parent  = {{mychildtdata}}</div>
+		<my-component  mp1="50"  :mp2="yyy" :mp3="xxx"   v-on:deneme22="mychildtdata=$event"> </my-component>
+		
+	</div>
+</body>
+
+<script type="module">
+	const app = Vue.createApp({
+		data() {
+			return {
+				xxx:0,
+				yyy:2000,
+				mychildtdata:"--------------"
+			}
+		},
+		methods: {
+			bbb() {
+				this.xxx=this.xxx+10;
+				console.log(this.xxx);
+
+			},
+		}
+	})
+	app.component('my-component', {
+		emits:["deneme22"],
+		props: ['mp1', 'mp2','mp3'],
+		template: `
+			<div>this data  is stattic  mp1 ={{this.mp1}}</div>
+			<div>this child data comes from parent mp2 = {{this.mp2}}</div>
+			<div>this child data comes from parent  mp3 = {{this.mp3}}</div>
+             `
+             ,
+                 data() {
+			return { 
+			myx:0
+			}
+		  },
+		methods:{
+			},
+		 mounted(){
+			  this.$emit('deneme22', "asdf");
+			  }
+	});
+	const MyComponent = app.component('my-component')
+	app.mount('#app')
+
+
+</script>
+
+</html>

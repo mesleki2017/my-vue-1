@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myvue1</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+		p{outline: solid;}
+        div {
+            background: yellow;
+            color: red;
+            font-weight: bold;
+            width: 50%;
+        }
+
+        div:hover {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <button @click="bbb">Parent Click</button>
+        <p><textarea v-model="myparentdata" class="textarea" placeholder="parent Textarea"></textarea></p>
+        <p>This is data coming from child to parent: {{mychildtdata}}</p>
+        <my-component :mp1="myparentdata" :mp2="yyy" :mp3="xxx" @deneme22="mychildtdata = $event"></my-component>
+    </div>
+</body>
+<script type="module">
+    const app = Vue.createApp({
+        data() {
+            return {
+                xxx: 0,
+                yyy: 2000,
+                mychildtdata: "--------------",
+                myparentdata:null
+            }
+        },
+        methods: {
+            bbb() {
+                this.xxx += 10;
+                console.log(this.xxx);
+            },
+        }
+    });
+
+    app.component('my-component', {
+        emits: ["deneme22"],
+        props: ['mp1', 'mp2', 'mp3'],
+        template: `
+            <p>This data icomes from parent text area mp1 = {{mp1}}</p>
+            <p>This child data comes from the parent mp2 = {{mp2}}</p>
+            <p>This child data comes from the parent click mp3 = {{mp3}}</p>
+            <textarea v-model="mydata" class="textarea" placeholder="child Textarea"></textarea>
+        `,
+        data() {
+            return {
+               mydata: "",
+            }
+        },
+	watch: {
+		mydata(ccc){
+			this.$emit('deneme22', ccc);
+			}
+						
+	},
+        mounted() {
+            this.$emit('deneme22', "asdf");
+        }
+    });
+
+    app.mount('#app');
+</script>
+</html>
