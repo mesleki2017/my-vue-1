@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>myvue1</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+	<style>
+        svg{outline: solid;}
+	</style>
+</head>
+
+<body>
+	<div id="app">
+		<button v-on:click='myimg'> click</button>
+		<div v-for="n in 1000">
+			<my-component    :mpcx="xxx"  :mpcy="yyy"></my-component>
+		</div>
+	</div>
+
+</body>
+<script type="module">
+//https://jsfiddle.net/g2sout46/7/
+	const app = Vue.createApp({
+		data() {
+			return {
+				xxx:0,
+				yyy:0,
+				
+			}
+		},
+		methods: {
+			bbb() {
+				this.xxx=this.xxx+10;
+				this.yyy=this.yyy+10;
+				console.log(this.xxx);
+				if(this.xxx>100){this.xxx=0;this.yyy=0}
+				let utterance = new SpeechSynthesisUtterance("Hello world!");
+				speechSynthesis.speak(utterance);
+
+
+			},
+			myevent1(e) {
+				console.log(e);
+				//this.mytxt2 = "top:" + e.clientY.toFixed(2) + "px;left:" + e.clientX.toFixed(2) + "px";
+			},
+			myimg(){
+		  	axios
+				.get('https://en.wikipedia.org/w/api.php?action=query&titles=Al-Farabi&prop=pageimages&format=json&pithumbsize=100')
+				.then(response => {
+					console.log(response)
+		  
+					})
+				.catch(error => console.log(error))
+		  }
+		}
+	})
+	app.component('my-component', {
+		emits:["deneme22"],
+		props: ['mpcx', 'mpcy'],
+		template: `
+			
+              `
+             ,
+                 data() {
+    return { 
+	myx:0,
+	myy:0,
+	mycircle:null,
+	rect:null,
+	mysvg:null,
+	mycolor:null,
+	myword:"Hello world!"
+    }
+  },methods: {
+	  dddd(e){
+		var things = ['Rock', 'Paper', 'Scissor'];
+		var thing = things[Math.floor(Math.random()*things.length)];
+		let utterance = new SpeechSynthesisUtterance(thing);
+		speechSynthesis.speak(utterance)
+		  }
+	  },
+    watch:{
+		mpcx(sss){
+		 this.rect.setAttribute("x", sss);
+		},
+		mpcy(sss){
+		 this.rect.setAttribute("y", sss);
+		}
+		},
+	  mounted(){
+			this.mycolor=Math.round(Math.random() * 0xffffff);
+			const myfill = `#${this.mycolor.toString(16).padStart(6, "0")}`;
+			this.mysvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+			this.mysvg .setAttribute('height', 30)
+			this.mysvg .setAttribute('width', 30)
+			document.body.appendChild(this.mysvg )
+			this.rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+			this.rect.setAttribute("x", 0);
+			this.rect.setAttribute("y", 0);
+			this.rect.setAttribute("width", "100%");
+			this.rect.setAttribute("height", "100%");
+			this.rect.setAttribute("fill", myfill);
+			this.mysvg.appendChild(this.rect)
+			this.rect.addEventListener('mousemove', 
+			function(e) {
+						console.log(e.ctrlKey);
+						console.log(e.currentTarget);
+						
+						if(e.ctrlKey){
+						this.mycolor=Math.round(Math.random() * 0xffffff);
+						const myfill = `#${this.mycolor.toString(16).padStart(6, "0")}`;
+						e.currentTarget.setAttribute('fill', myfill);
+						var ddd= e.currentTarget.getAttribute('fill');
+						console.log("getAttribute ",ddd);}
+						}
+						);
+			this.rect.addEventListener('mouseenter', 
+			function(e) {
+						console.log(e.type);
+						console.log(e.currentTarget);
+						e.currentTarget.setAttribute('fill', '#000000');
+						var ddd= e.currentTarget.getAttribute('fill');
+						console.log("getAttribute ",ddd);
+						}
+						);
+			this.rect.addEventListener('click', 
+			this.dddd				
+						);
+		  }
+	});
+	const MyComponent = app.component('my-component')
+	app.mount('#app')
+
+
+</script>
+
+</html>

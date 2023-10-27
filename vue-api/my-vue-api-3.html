@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+</head>
+<style>
+  .myflex{ 
+	  display: flex;
+	  flex-wrap: wrap;
+	  gap: 1rem;
+	   align-content: flex-start;
+	   flex-direction: column;
+	  
+	  }
+
+  .aaa{
+    background-color: aqua;
+    font-size: 2rem;
+
+  }
+  .bbb{
+    background-color: rgb(60, 255, 0);
+    font-size: 2rem;
+  }
+  .ccc{
+    background-color: green;
+  }
+    button{ 
+	  margin: 10px;
+	  }
+  input{ 
+	  margin: 10px;
+	  }
+</style>
+<body>
+    <div class ="myflex" id="app">
+
+      <button v-on:click='dolarhesapla'>guncelle</button>
+
+      <div class="ccc" >{{myapi1.query}} -- {{myapi1.query}}</div>
+
+    </div>
+</body>
+
+<script type="module">
+	//https://en.wikipedia.org/w/api.php?action=query&titles=Al-Farabi&prop=pageimages&format=json&pithumbsize=100
+	//https://en.wikipedia.org/w/api.php?action=query&origin=*&format=json&generator=search&gsrnamespace=0&gsrlimit=5&gsrsearch=%27New_England_Patriots%27
+	import { createApp, ref } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+	const app = createApp({
+    data() {
+      return {
+        mytime:new Date(),
+        myapi1:"",
+      }
+    },
+    methods:{
+      dolarhesapla(){
+		  //https://en.wikipedia.org/w/api.php?action=query&titles=Al-Farabi&prop=pageimages&format=json
+		  	axios
+      .get('https://en.wikipedia.org/w/api.php?action=query&origin=*&format=json&generator=search&gsrnamespace=0&gsrlimit=5&gsrsearch=%27New_England_Patriots%27')
+      .then(response => {
+		  console.log(response)
+		  
+		  })
+      .catch(error => console.log(error)) 
+		  }
+      
+    },
+    computed :{},
+    mounted(){
+
+		}
+  })
+
+app.mount('#app')
+</script>
+</html>

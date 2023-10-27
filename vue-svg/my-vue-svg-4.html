@@ -9,11 +9,6 @@
 	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
 	<style>
-	div {
-        }
-	div:hover {
-
-        }
         svg{outline: solid;}
 	</style>
 </head>
@@ -22,7 +17,7 @@
 	<div id="app">
 		<button v-on:click='bbb'> click</button>
 		<div v-for="n in 1000">
-			<my-component  :mpcx="xxx"  :mpcy="yyy"> </my-component>
+			<my-component   :mpcx="xxx"  :mpcy="yyy"></my-component>
 		</div>
 	</div>
 
@@ -44,6 +39,10 @@
 				if(this.xxx>100){this.xxx=0;this.yyy=0}
 
 			},
+			myevent1(e) {
+				console.log(e);
+				//this.mytxt2 = "top:" + e.clientY.toFixed(2) + "px;left:" + e.clientX.toFixed(2) + "px";
+			}
 		}
 	})
 	app.component('my-component', {
@@ -82,6 +81,10 @@
 			this.rect.setAttribute("height", "100%");
 			this.rect.setAttribute("fill", "red");
 			this.mysvg.appendChild(this.rect)
+			this.rect.addEventListener('mouseover', function(e) {
+						e.currentTarget.setAttribute('fill', '#000000');
+
+});
 		  }
 	});
 	const MyComponent = app.component('my-component')

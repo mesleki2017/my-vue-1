@@ -9,21 +9,13 @@
 	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
 	<style>
-	div {
-        }
-	div:hover {
-
-        }
-        svg{outline: solid;}
 	</style>
 </head>
 
 <body>
 	<div id="app">
 		<button v-on:click='bbb'> click</button>
-		<div v-for="n in 1000">
-			<my-component  :mpcx="xxx"  :mpcy="yyy"> </my-component>
-		</div>
+		<div v-for="n in 100"><my-component  :mpcx="xxx"  :mpcy="yyy"> </my-component></div>
 	</div>
 
 </body>
@@ -71,17 +63,17 @@
 		}
 		},
 	  mounted(){
-			this.mysvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-			this.mysvg .setAttribute('height', 50)
-			this.mysvg .setAttribute('width', 50)
-			document.body.appendChild(this.mysvg )
-			this.rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-			this.rect.setAttribute("x", 0);
-			this.rect.setAttribute("y", 0);
-			this.rect.setAttribute("width", "100%");
-			this.rect.setAttribute("height", "100%");
-			this.rect.setAttribute("fill", "red");
-			this.mysvg.appendChild(this.rect)
+		  this.mysvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+		  this.mysvg .setAttribute('height', '100')
+		this.mysvg .setAttribute('width', '100')
+		document.body.appendChild(this.mysvg )
+		 this.rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+		 this.rect.setAttribute("x", 0);
+		this.rect.setAttribute("y", 0);
+		this.rect.setAttribute("width", 50);
+		this.rect.setAttribute("height", 50);
+		this.rect.setAttribute("fill", "red");
+		this.mysvg.appendChild(this.rect)
 		  }
 	});
 	const MyComponent = app.component('my-component')
